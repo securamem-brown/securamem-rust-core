@@ -1,0 +1,47 @@
+# Rust Build Artifacts
+/target/
+**/*.rs.bk
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Runtime Logs & Receipts (Never commit these)
+.securamem/receipts/
+.securamem/reports/
+.securamem/logs/
+.securamem/checkpoints/
+.securamem/audit_bundle_check/
+.securamem/worm/
+.securamem/simulations/
+.securamem/*.jsonl
+.securamem/*.csv
+
+# Secrets & Keys (CRITICAL - Block everything, allow nothing)
+.securamem/keys/
+.securamem/*.pem
+.securamem/*.key
+.securamem/*-key.json
+.securamem/signing-keys.json
+
+# Configs (Ignore runtime configs, keep templates if needed)
+.securamem/config.json
+.securamem/file-digests.json
+
+# Runtime state and lock files
+.securamem/.init_lock
+.securamem/.migrated-*
+.securamem/pro.enabled
+.securamem/*.smemctx
+.securamem/*-export.smemctx
+
+# Test and benchmark artifacts
+.securamem/benchmark-*.json
+.securamem/test-*.json
+.securamem/*.html
+
+# OS Junk
+.DS_Store
+Thumbs.db
+.vscode/

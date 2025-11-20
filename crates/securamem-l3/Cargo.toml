@@ -1,0 +1,19 @@
+[package]
+name = "securamem-l3"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+securamem-core = { path = "../securamem-core" }
+securamem-storage = { path = "../securamem-storage" }
+
+# Web Server
+axum = { workspace = true }
+tokio = { workspace = true }
+
+# Metrics
+prometheus = { workspace = true }
+
+# Utilities
+serde_json = { workspace = true }
+tracing = { workspace = true }

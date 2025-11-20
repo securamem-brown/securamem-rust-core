@@ -1,0 +1,91 @@
+# SecuraMem Rust Workspace
+# Version 2.0 - AI Black Box Recorder (Audit-Only)
+
+[workspace]
+members = [
+    "crates/securamem-cli",
+    "crates/securamem-core",
+    "crates/securamem-crypto",
+    "crates/securamem-storage",
+    "crates/securamem-l1",
+    "crates/securamem-l3",
+    "crates/securamem-firewall",
+]
+resolver = "2"
+
+[workspace.package]
+version = "2.0.0"
+edition = "2021"
+authors = ["SecuraMem Team"]
+license = "PROPRIETARY"
+rust-version = "1.75"
+
+[workspace.dependencies]
+# === Async Runtime ===
+tokio = { version = "1.35", features = ["full", "tracing"] }
+tokio-util = { version = "0.7", features = ["io"] }
+futures = "0.3"
+
+# === Database (SQLx Only - No rusqlite) ===
+sqlx = { version = "0.7", features = [
+    "sqlite",
+    "runtime-tokio-rustls",
+    "migrate",
+    "chrono",
+    "uuid"
+] }
+
+# === Cryptography (ED25519 + SHA-256 only) ===
+ed25519-dalek = { version = "2.1", features = ["rand_core", "pkcs8", "pem"] }
+pkcs8 = { version = "0.10", features = ["pem"] }
+signature = "2.2"
+ring = "0.17"
+sha2 = "0.10"
+rand_core = { version = "0.6", features = ["getrandom"] }
+
+# === RFC 3161 Timestamping ===
+x509-parser = "0.16"
+asn1-rs = "0.6"
+der = "0.7"
+reqwest = { version = "0.11", features = ["blocking", "rustls-tls", "json"] }
+
+# === Web Server & Metrics ===
+axum = { version = "0.7", features = ["tracing", "tower-log"] }
+hyper = { version = "1.0", features = ["server", "http1", "http2"] }
+tower = { version = "0.4", features = ["timeout", "limit"] }
+tower-http = { version = "0.5", features = ["trace", "compression-gzip"] }
+prometheus = "0.13"
+
+# === CLI ===
+clap = { version = "4.4", features = ["derive", "env", "wrap_help"] }
+colored = "2.1"
+
+# === Serialization ===
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+
+# === Error Handling & Logging ===
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# === Utilities ===
+uuid = { version = "1.6", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+hex = "0.4"
+base64 = "0.21"
+flate2 = "1.0"
+
+[profile.release]
+opt-level = "z"          # Optimize for size (harder to reverse engineer)
+lto = "fat"              # Link-time optimization across all crates
+codegen-units = 1        # Single codegen unit (better optimization)
+strip = true             # Strip symbols (remove debug info)
+panic = "abort"          # Smaller binary, immediate termination
+overflow-checks = true   # Runtime integer overflow checks
+
+[profile.dev]
+opt-level = 0
+debug = true

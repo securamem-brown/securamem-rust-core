@@ -1,0 +1,124 @@
+# SecuraMem Local Alert Rules (Air-Gapped)
+# These rules drive AlertBus or local dashboards.
+# Round 3 P2 Implementation
+
+groups:
+  - name: compliance_rules
+    rules:
+      - alert: ChainBreakDetected
+        expr: smem_audit_chain_health == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Audit chain integrity failure detected"
+          description: "Immediate verification required. Chain integrity check failed."
+
+      - alert: ComplianceScoreDrop
+        expr: smem_compliance_score < 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Compliance score dropped below threshold"
+          description: "Investigate recent decisions or policy drift. Current score below 80%."
+
+      - alert: PolicyViolationSpike
+        expr: rate(smem_policy_violations_total[10m]) > 5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Unusual policy violation activity"
+          description: "Check audit log for repetitive non-compliant behavior. High violation rate detected."
+
+      - alert: SystemStress
+        expr: smem_cpu_usage_percent > 90 or smem_memory_usage_mb > 1024
+        for: 3m
+        labels:
+          severity: info
+        annotations:
+          summary: "High system resource usage"
+          description: "Monitor performance; may affect compliance SLA. CPU or memory usage is high."
+
+  - name: security_rules
+    rules:
+      - alert: CriticalComplianceFailure
+        expr: smem_compliance_score < 0.5
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical compliance failure"
+          description: "Compliance score below 50%. Immediate remediation required."
+
+      - alert: SignatureFailures
+        expr: rate(smem_receipts_verified_total[5m]) == 0 and rate(smem_policy_violations_total[5m]) > 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Signature verification failures detected"
+          description: "Receipts are being generated but not verified. Potential cryptographic issue."
+
+  - name: operational_rules
+    rules:
+      - alert: HighMemoryUsage
+        expr: smem_memory_usage_mb > 2048
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage above 2GB. Consider system optimization."
+
+      - alert: ServiceDown
+        expr: smem_exporter_up == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "SecuraMem service appears to be down"
+          description: "Exporter is not responding. Check service health."
+
+      - alert: LowReceiptActivity
+        expr: rate(smem_receipts_verified_total[1h]) < 0.1
+        for: 30m
+        labels:
+          severity: info
+        annotations:
+          summary: "Low receipt generation activity"
+          description: "Unusually low receipt activity. System may be idle or have issues."
+
+# Configuration for alert thresholds
+config:
+  global:
+    evaluation_interval: 15s
+    scrape_interval: 15s
+
+  # Alert manager configuration (local only)
+  alerting:
+    alertmanagers:
+      - static_configs:
+          - targets:
+            - localhost:9093  # Local alertmanager if available
+
+  # Rule evaluation
+  rule_files:
+    - "alert-rules.yaml"
+
+# Grafana dashboard queries (examples)
+dashboard_queries:
+  compliance_overview:
+    - smem_compliance_score
+    - smem_policy_violations_total
+    - smem_audit_chain_health
+
+  system_health:
+    - smem_cpu_usage_percent
+    - smem_memory_usage_mb
+    - smem_uptime_seconds
+
+  audit_activity:
+    - rate(smem_receipts_verified_total[5m])
+    - smem_receipts_verified_total

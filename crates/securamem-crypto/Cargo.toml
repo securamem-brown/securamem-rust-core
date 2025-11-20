@@ -1,0 +1,33 @@
+[package]
+name = "securamem-crypto"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+securamem-core = { path = "../securamem-core" }
+
+# Cryptography
+ed25519-dalek = { workspace = true }
+pkcs8 = { workspace = true }
+signature = { workspace = true }
+ring = { workspace = true }
+sha2 = { workspace = true }
+rand_core = { workspace = true }
+
+# RFC 3161
+x509-parser = { workspace = true }
+asn1-rs = { workspace = true }
+der = { workspace = true }
+reqwest = { workspace = true, optional = true }
+
+# Utilities
+hex = { workspace = true }
+base64 = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+
+[features]
+tsa-client = ["reqwest"]

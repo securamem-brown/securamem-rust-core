@@ -1,0 +1,15 @@
+[package]
+name = "securamem-l1"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+securamem-core = { path = "../securamem-core" }
+securamem-crypto = { path = "../securamem-crypto" }
+securamem-storage = { path = "../securamem-storage" }
+
+# Utilities
+serde_json = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }

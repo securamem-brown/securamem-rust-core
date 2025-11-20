@@ -1,0 +1,23 @@
+[package]
+name = "securamem-cli"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "smem"
+path = "src/main.rs"
+
+[dependencies]
+securamem-core = { path = "../securamem-core" }
+securamem-crypto = { path = "../securamem-crypto" }
+securamem-storage = { path = "../securamem-storage" }
+securamem-l1 = { path = "../securamem-l1" }
+securamem-l3 = { path = "../securamem-l3" }
+securamem-firewall = { path = "../securamem-firewall" }
+clap = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+ed25519-dalek = { workspace = true }
+pkcs8 = { workspace = true }
+rand_core = { workspace = true }

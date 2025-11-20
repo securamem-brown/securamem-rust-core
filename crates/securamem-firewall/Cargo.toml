@@ -1,0 +1,39 @@
+[package]
+name = "securamem-firewall"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+# Core SecuraMem dependencies
+securamem-core = { path = "../securamem-core" }
+securamem-crypto = { path = "../securamem-crypto" }
+securamem-l1 = { path = "../securamem-l1" }
+securamem-storage = { path = "../securamem-storage" }
+
+# ONNX inference (tract-onnx 0.21 uses ndarray 0.16)
+tract-onnx = "0.21"
+ndarray = "0.16"
+
+# Tokenization
+tokenizers = { version = "0.19", default-features = false, features = ["onig"] }
+
+# Web server
+axum = { workspace = true }
+tokio = { workspace = true }
+tower = { workspace = true }
+tower-http = { version = "0.5", features = ["trace", "cors"] }
+
+# HTTP client
+reqwest = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling & logging
+anyhow = "1.0"
+tracing = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
