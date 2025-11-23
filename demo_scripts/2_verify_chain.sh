@@ -87,17 +87,17 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 # Query the database directly for stats
-if [ -f .securamem/memory.db ]; then
+if [ -f .securamemrust/memory.db ]; then
     echo "Total audit entries:"
-    sqlite3 .securamem/memory.db "SELECT COUNT(*) FROM audit_log;"
+    sqlite3 .securamemrust/memory.db "SELECT COUNT(*) FROM audit_log;"
     echo ""
 
     echo "Entries by operation type:"
-    sqlite3 .securamem/memory.db "SELECT operation_type, COUNT(*) as count FROM audit_log GROUP BY operation_type ORDER BY count DESC;"
+    sqlite3 .securamemrust/memory.db "SELECT operation_type, COUNT(*) as count FROM audit_log GROUP BY operation_type ORDER BY count DESC;"
     echo ""
 
     echo "Firewall decisions:"
-    sqlite3 .securamem/memory.db "SELECT
+    sqlite3 .securamemrust/memory.db "SELECT
         json_extract(audit_data, '$.decision') as decision,
         COUNT(*) as count
     FROM audit_log
@@ -106,7 +106,7 @@ if [ -f .securamem/memory.db ]; then
     echo ""
 
     echo "Average similarity score for blocked requests:"
-    sqlite3 .securamem/memory.db "SELECT
+    sqlite3 .securamemrust/memory.db "SELECT
         AVG(CAST(json_extract(audit_data, '$.similarity_score') AS REAL)) as avg_similarity
     FROM audit_log
     WHERE operation_type = 'firewall_decision'
@@ -123,8 +123,8 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 echo "To demonstrate tamper detection:"
 echo ""
-echo "  1. Manually modify .securamem/memory.db with a SQLite editor"
-echo "  2. Run: smem verify"
+echo "  1. Manually modify .securamemrust/memory.db with a SQLite editor"
+echo "  2. Run: smrust verify"
 echo "  3. Expected: Hash chain validation will FAIL"
 echo ""
 echo "This proves the blockchain-style immutability of the audit trail."

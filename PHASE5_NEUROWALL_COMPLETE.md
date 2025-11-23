@@ -207,8 +207,8 @@ L2 norm: 1.000000 (should be ~1.0)
 
 ### 1. Compile-Time Embedding
 ```rust
-const MODEL_BYTES: &[u8] = include_bytes!("../../../.securamem/models/all-MiniLM-L6-v2/model.onnx");
-const TOKENIZER_BYTES: &[u8] = include_bytes!("../../../.securamem/models/all-MiniLM-L6-v2/tokenizer.json");
+const MODEL_BYTES: &[u8] = include_bytes!("../../../.securamemrust/models/all-MiniLM-L6-v2/model.onnx");
+const TOKENIZER_BYTES: &[u8] = include_bytes!("../../../.securamemrust/models/all-MiniLM-L6-v2/tokenizer.json");
 ```
 
 **Benefits:**

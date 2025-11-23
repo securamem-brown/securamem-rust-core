@@ -887,7 +887,7 @@ use sqlx::sqlite::{SqlitePool, SqliteConnectOptions};
 
 let pool = SqlitePool::connect_with(
     SqliteConnectOptions::new()
-        .filename(".securamem/memory.db")
+        .filename(".securamemrust/memory.db")
         .create_if_missing(true)
         .journal_mode(sqlx::sqlite::SqliteJournalMode::Wal)  // WAL for concurrency
         .synchronous(sqlx::sqlite::SqliteSynchronous::Normal)  // Balance safety/speed
@@ -900,8 +900,8 @@ Use `tokio::task::spawn_blocking` to move blocking operations off async threads:
 ```rust
 use rusqlite::Connection;
 
-let conn = Connection::open(".securamem/memory.db")?;
-conn.load_extension_no_entrypoint(".securamem/sqlite-vec/vec0.dll")?;
+let conn = Connection::open(".securamemrust/memory.db")?;
+conn.load_extension_no_entrypoint(".securamemrust/sqlite-vec/vec0.dll")?;
 
 // Wrap in spawn_blocking for async context
 tokio::task::spawn_blocking(move || {
@@ -1515,7 +1515,7 @@ pub struct ServiceContainer {
 impl ServiceContainer {
     pub async fn new(project_path: PathBuf) -> Result<Self> {
         // Initialize database
-        let db_path = project_path.join(".securamem").join("memory.db");
+        let db_path = project_path.join(".securamemrust").join("memory.db");
         let db = Arc::new(SqliteDatabase::open(db_path).await?);
 
         // Initialize L1 services
@@ -1732,7 +1732,7 @@ prometheus_port = 9091
 bind_address = "127.0.0.1"  # Enforced, cannot be changed to 0.0.0.0
 
 [database]
-path = ".securamem/memory.db"
+path = ".securamemrust/memory.db"
 journal_mode = "wal"
 cache_size = 10000  # Pages (10MB)
 
@@ -1740,7 +1740,7 @@ cache_size = 10000  # Pages (10MB)
 backend = "sqlite-vec"  # Options: sqlite-vec, faiss, local
 dimensions = 384
 model = "e5-small-v2"
-model_path = ".securamem/models/e5-small-v2.onnx"
+model_path = ".securamemrust/models/e5-small-v2.onnx"
 
 [compliance]
 frameworks = ["gdpr", "eu_ai_act", "nist_rmf"]
@@ -1749,7 +1749,7 @@ retention_days = 2555  # 7 years
 [logging]
 level = "info"
 format = "json"
-output = ".securamem/logs/securamem.log"
+output = ".securamemrust/logs/securamem.log"
 ```
 
 ---

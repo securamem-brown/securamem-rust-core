@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use securamem_storage::Database;
 
 #[derive(Parser)]
-#[command(name = "smem")]
+#[command(name = "smrust")]
 #[command(version = "2.0.0")]
 #[command(about = "SecuraMem - AI Black Box Recorder (Audit-Only)", long_about = None)]
 struct Cli {
@@ -110,7 +110,7 @@ async fn main() -> securamem_core::Result<()> {
             let machine_id = securamem_core::license::get_machine_id()?;
             eprintln!("Your Machine ID: {}", machine_id);
             eprintln!();
-            eprintln!("📧 Send this Machine ID to sales@securamem.com to request a license.");
+            eprintln!("📧 Send this Machine ID to jeremy@securamem.com to request a license.");
             eprintln!("💾 Place the received license.key file in the current directory.");
             std::process::exit(1);
         }
@@ -132,7 +132,7 @@ async fn main() -> securamem_core::Result<()> {
                 let machine_id = securamem_core::license::get_machine_id()?;
                 eprintln!("Your Machine ID: {}", machine_id);
                 eprintln!();
-                eprintln!("📧 Contact sales@securamem.com for a new license.");
+                eprintln!("📧 Contact jeremy@securamem.com for a new license.");
                 std::process::exit(1);
             }
         }
@@ -140,7 +140,7 @@ async fn main() -> securamem_core::Result<()> {
 
     match cli.command {
         Commands::Init => {
-            let db_path = PathBuf::from(".securamem/memory.db");
+            let db_path = PathBuf::from(".securamemrust/memory.db");
 
             tracing::info!("Initializing SecuraMem storage...");
 
@@ -155,11 +155,11 @@ async fn main() -> securamem_core::Result<()> {
             Ok(())
         }
         Commands::Log { message } => {
-            let db_path = PathBuf::from(".securamem/memory.db");
+            let db_path = PathBuf::from(".securamemrust/memory.db");
 
             // Check if database exists
             if !db_path.exists() {
-                tracing::error!("Database not initialized. Run 'smem init' first.");
+                tracing::error!("Database not initialized. Run 'smrust init' first.");
                 return Ok(());
             }
 
@@ -167,7 +167,7 @@ async fn main() -> securamem_core::Result<()> {
             let db = Database::init(&db_path).await?;
 
             // Generate or load signing key (for MVP, generate a temp key)
-            // TODO: In production, load from .securamem/keys/
+            // TODO: In production, load from .securamemrust/keys/
             let key = securamem_crypto::SecuraMemSigningKey::generate();
 
             // Create orchestrator
@@ -188,11 +188,11 @@ async fn main() -> securamem_core::Result<()> {
             Ok(())
         }
         Commands::Verify { all: _ } => {
-            let db_path = PathBuf::from(".securamem/memory.db");
+            let db_path = PathBuf::from(".securamemrust/memory.db");
 
             // Check if database exists
             if !db_path.exists() {
-                tracing::error!("Database not initialized. Run 'smem init' first.");
+                tracing::error!("Database not initialized. Run 'smrust init' first.");
                 return Ok(());
             }
 
@@ -226,11 +226,11 @@ async fn main() -> securamem_core::Result<()> {
             Ok(())
         }
         Commands::Serve { port } => {
-            let db_path = PathBuf::from(".securamem/memory.db");
+            let db_path = PathBuf::from(".securamemrust/memory.db");
 
             // Check if database exists
             if !db_path.exists() {
-                tracing::error!("Database not initialized. Run 'smem init' first.");
+                tracing::error!("Database not initialized. Run 'smrust init' first.");
                 return Ok(());
             }
 
@@ -247,12 +247,12 @@ async fn main() -> securamem_core::Result<()> {
             Ok(())
         }
         Commands::Status => {
-            let db_path = PathBuf::from(".securamem/memory.db");
+            let db_path = PathBuf::from(".securamemrust/memory.db");
 
             // Check if database exists
             if !db_path.exists() {
                 println!("SecuraMem Status: NOT INITIALIZED");
-                println!("  Run 'smem init' to initialize the audit log.");
+                println!("  Run 'smrust init' to initialize the audit log.");
                 return Ok(());
             }
 
@@ -344,19 +344,19 @@ async fn main() -> securamem_core::Result<()> {
         Commands::MachineId => {
             let machine_id = securamem_core::license::get_machine_id()?;
             println!("Machine ID: {}", machine_id);
-            println!("\n📧 Send this Machine ID to sales@securamem.com to request a license.");
+            println!("\n📧 Send this Machine ID to jeremy@securamem.com to request a license.");
             Ok(())
         }
         Commands::Firewall { port, openai_api_key } => {
             tracing::info!("Starting SecuraMem Firewall (NeuroWall) with audit logging...");
 
             let root_dir = std::env::current_dir()?;
-            let keys_dir = root_dir.join(".securamem/keys");
-            let db_path = root_dir.join(".securamem/memory.db");
+            let keys_dir = root_dir.join(".securamemrust/keys");
+            let db_path = root_dir.join(".securamemrust/memory.db");
 
             // 1. Check database exists
             if !db_path.exists() {
-                tracing::error!("Database not initialized. Run 'smem init' first.");
+                tracing::error!("Database not initialized. Run 'smrust init' first.");
                 return Ok(());
             }
 

@@ -179,14 +179,14 @@ mod tests {
     fn test_receipt_builder() {
         let actor = Actor::new("test_user");
         let receipt = Receipt::builder("r_test_123", actor, "cli_command")
-            .command("smem verify")
+            .command("smrust verify")
             .parameters(serde_json::json!({"args": ["--all"]}))
             .result_summary("Verification complete")
             .build();
 
         assert_eq!(receipt.receipt_id, "r_test_123");
         assert_eq!(receipt.context.operation_type, "cli_command");
-        assert_eq!(receipt.context.command, Some("smem verify".to_string()));
+        assert_eq!(receipt.context.command, Some("smrust verify".to_string()));
         assert!(receipt.output.success);
     }
 

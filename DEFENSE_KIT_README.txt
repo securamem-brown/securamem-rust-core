@@ -10,7 +10,7 @@ CRITICAL: This binary is hardware-locked using cryptographic node-locking.
 └───────────────────────────────────────────────────────────────────────┘
 
 Windows:
-    smem.exe machine-id
+    smrust.exe machine-id
 
 macOS/Linux:
     ./smem machine-id
@@ -22,7 +22,7 @@ Expected Output:
 │ STEP 2: REQUEST A DEMO LICENSE                                        │
 └───────────────────────────────────────────────────────────────────────┘
 
-Email the Machine ID to: sales@securamem.com
+Email the Machine ID to: jeremy@securamem.com
 
 Subject: "Demo License Request - [Your Company Name]"
 
@@ -34,10 +34,10 @@ and ensures compliance with SOC 2 Type II audit requirements.
 │ STEP 3: INSTALL THE LICENSE                                           │
 └───────────────────────────────────────────────────────────────────────┘
 
-Place the received license.key file in the same directory as smem.exe:
+Place the received license.key file in the same directory as smrust.exe:
 
     SecuraMem_Defense_Kit_v2/
-    ├── smem.exe           (100 MB - The Sovereign Binary)
+    ├── smrust.exe           (100 MB - The Sovereign Binary)
     └── license.key        (Your hardware-locked license)
 
 ┌───────────────────────────────────────────────────────────────────────┐
@@ -45,13 +45,13 @@ Place the received license.key file in the same directory as smem.exe:
 └───────────────────────────────────────────────────────────────────────┘
 
 # Initialize database and cryptographic identity
-smem.exe init
+smrust.exe init
 
 # Verify installation
-smem.exe status
+smrust.exe status
 
 # Test embedding generation (384D ONNX model)
-smem.exe test-embedding --text "Hello world"
+smrust.exe test-embedding --text "Hello world"
 
 Expected: 384-dimensional vector with L2 norm = 1.000000
 
@@ -61,7 +61,7 @@ Expected: 384-dimensional vector with L2 norm = 1.000000
 
 # Start the AI firewall (requires OPENAI_API_KEY)
 set OPENAI_API_KEY=sk-...
-smem.exe firewall --port 3051
+smrust.exe firewall --port 3051
 
 # In another terminal, send a benign request:
 curl http://localhost:3051/v1/chat/completions \
@@ -82,7 +82,7 @@ Expected: HTTP 403 Forbidden with semantic threat details
 └───────────────────────────────────────────────────────────────────────┘
 
 # Verify cryptographic integrity of entire audit chain
-smem.exe verify
+smrust.exe verify
 
 Expected Output:
     ✓ AUDIT CHAIN INTEGRITY CONFIRMED
@@ -92,10 +92,10 @@ Expected Output:
       All signatures valid: TRUE
 
 # Export audit trail for compliance reporting
-smem.exe export-audit --output audit_report.json
+smrust.exe export-audit --output audit_report.json
 
 # View recent firewall decisions
-smem.exe audit-log --limit 10 --filter firewall_decision
+smrust.exe audit-log --limit 10 --filter firewall_decision
 
 ┌───────────────────────────────────────────────────────────────────────┐
 │ SYSTEM ARCHITECTURE                                                    │
@@ -210,7 +210,7 @@ Pricing:
 └───────────────────────────────────────────────────────────────────────┘
 
 Website:    https://securamem.com
-Email:      sales@securamem.com
+Email:      jeremy@securamem.com
 GitHub:     https://github.com/securamem (private repo access upon license)
 
 Technical Support:
@@ -230,13 +230,13 @@ The hardware node-lock is cryptographically enforced. Attempts to bypass
 the license verification will be logged and reported.
 
 For enterprise site licenses or source code access, contact
-sales@securamem.com with your requirements.
+jeremy@securamem.com with your requirements.
 
 ═══════════════════════════════════════════════════════════════════════
 
 Build Date:     2025-11-19
 Version:        2.0.0
-Binary Hash:    (Run: certutil -hashfile smem.exe SHA256)
+Binary Hash:    (Run: certutil -hashfile smrust.exe SHA256)
 Status:         PRODUCTION READY ✅
 
 ═══════════════════════════════════════════════════════════════════════

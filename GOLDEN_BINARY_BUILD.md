@@ -6,7 +6,7 @@
 
 **Fix Applied:**
 - Added `load_from_file()` and `save_to_file()` to `SecuraMemSigningKey`
-- Updated firewall command to load persistent identity from `.securamem/keys/private.pem`
+- Updated firewall command to load persistent identity from `.securamemrust/keys/private.pem`
 - Identity is now stable across restarts, ensuring continuous chain-of-custody
 
 **Impact:**
@@ -37,8 +37,8 @@ cargo clean
 cargo build --release
 
 # 3. Locate the Golden Binary
-# Windows: target/release/smem.exe
-# macOS/Linux: target/release/smem
+# Windows: target/release/smrust.exe
+# macOS/Linux: target/release/smrust
 ```
 
 ## Binary Characteristics
@@ -61,7 +61,7 @@ cargo build --release
 
 ### Minimal Deployment (3 files)
 ```
-smem.exe                    # The Golden Binary
+smrust.exe                    # The Golden Binary
 license.key                 # Hardware-locked license (JWT)
 .env                        # Optional: OPENAI_API_KEY
 ```
@@ -119,7 +119,7 @@ curl http://localhost:3051/v1/chat/completions \
   -d '{"model":"gpt-4","messages":[{"role":"user","content":"Hello"}]}'
 
 # Check audit log
-sqlite3 .securamem/memory.db "SELECT * FROM audit_log WHERE operation_type='firewall_decision' ORDER BY id DESC LIMIT 1;"
+sqlite3 .securamemrust/memory.db "SELECT * FROM audit_log WHERE operation_type='firewall_decision' ORDER BY id DESC LIMIT 1;"
 ```
 
 **Expected Audit Entry:**
@@ -219,7 +219,7 @@ sqlite3 .securamem/memory.db "SELECT * FROM audit_log WHERE operation_type='fire
 
 ### Critical Fix Applied
 - ❌ **BEFORE:** Random ephemeral identities (broken chain-of-custody)
-- ✅ **AFTER:** Persistent identity loaded from `.securamem/keys/private.pem`
+- ✅ **AFTER:** Persistent identity loaded from `.securamemrust/keys/private.pem`
 
 ### Parity Verification
 - ✅ Node.js → Rust embedding parity confirmed

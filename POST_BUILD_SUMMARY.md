@@ -3,7 +3,7 @@
 **Build Date**: 2025-11-19
 **Compiler**: Rust 1.83 (stable)
 **Build Time**: 11 minutes 3 seconds
-**Final Binary**: `target/release/smem.exe`
+**Final Binary**: `target/release/smrust.exe`
 
 ---
 
@@ -27,7 +27,7 @@
 
 ### 3. Clean Install Simulation ✅ PASS
 
-**Test**: Isolated directory with `smem.exe` only
+**Test**: Isolated directory with `smrust.exe` only
 **Result**: Zero DLL dependencies, graceful license error
 **Assessment**: **Static linking confirmed** - no runtime dependencies
 
@@ -36,7 +36,7 @@
 ## 🔒 Binary Signature
 
 ```
-File: target/release/smem.exe
+File: target/release/smrust.exe
 Size: 100 MB (104,857,600 bytes)
 SHA-256: f3fd2701a1bf8daff84b3d3faf5bf738a78fb6f4d1e2a9466dadcf9455728ab1
 ```
@@ -52,7 +52,7 @@ Your package is ready for VC/Acquirer demonstration:
 ```
 SecuraMem_Defense_Kit_v2/
 ├── bin/
-│   └── smem.exe                           # 100 MB Golden Binary
+│   └── smrust.exe                           # 100 MB Golden Binary
 │
 ├── docs/
 │   ├── DEFENSE_KIT_README.txt             # Customer installation guide
@@ -81,7 +81,7 @@ When sending to VCs or acquirers, **do NOT just attach the .exe**.
 ```
 Attached is the SecuraMem Defense Kit containing:
 
-1. smem.exe (100 MB sovereign binary)
+1. smrust.exe (100 MB sovereign binary)
 2. Installation & demo documentation
 3. AI attack simulation scripts
 4. Audit verification tools
@@ -90,7 +90,7 @@ IMPORTANT: This binary is cryptographically hardware-locked.
 
 To activate your 24-hour demo license:
 
-1. Run: smem.exe machine-id
+1. Run: smrust.exe machine-id
 2. Email the Machine ID back to this thread
 3. We will generate a license.key bound to your specific hardware
 
@@ -147,7 +147,7 @@ SecuraMem Platform Architect
 
 ### Fix #1: Persistent Identity (Chain-of-Custody)
 **Before**: Random ephemeral keys → broken audit trail
-**After**: Persistent identity loaded from `.securamem/keys/private.pem`
+**After**: Persistent identity loaded from `.securamemrust/keys/private.pem`
 **Impact**: Auditors can verify "NeuroWall" is a single continuous actor
 
 ### Fix #2: Golden Screw Integration

@@ -15,10 +15,10 @@ use tokenizers::Tokenizer;
 use tract_onnx::prelude::*;
 
 /// Embedded ONNX model (all-MiniLM-L6-v2)
-const MODEL_BYTES: &[u8] = include_bytes!("../../../.securamem/models/all-MiniLM-L6-v2/model.onnx");
+const MODEL_BYTES: &[u8] = include_bytes!("../../../.securamemrust/models/all-MiniLM-L6-v2/model.onnx");
 
 /// Embedded tokenizer configuration
-const TOKENIZER_BYTES: &[u8] = include_bytes!("../../../.securamem/models/all-MiniLM-L6-v2/tokenizer.json");
+const TOKENIZER_BYTES: &[u8] = include_bytes!("../../../.securamemrust/models/all-MiniLM-L6-v2/tokenizer.json");
 
 /// Special tokens (BERT vocabulary)
 const CLS_TOKEN_ID: i64 = 101;

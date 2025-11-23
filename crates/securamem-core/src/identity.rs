@@ -132,7 +132,7 @@ mod tests {
 
     #[test]
     fn test_identity_persistence() {
-        let temp_dir = std::env::temp_dir().join("smem_test_identity");
+        let temp_dir = std::env::temp_dir().join("smrust_test_identity");
         std::fs::create_dir_all(&temp_dir).unwrap();
 
         // First initialization - generates new key

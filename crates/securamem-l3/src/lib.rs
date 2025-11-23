@@ -25,12 +25,12 @@ impl Metrics {
         use prometheus::{register_counter, register_gauge};
 
         let http_requests = register_counter!(
-            "smem_http_requests_total",
+            "smrust_http_requests_total",
             "Total HTTP requests received"
         ).map_err(|e| SecuraMemError::Internal(e.to_string()))?;
 
         let audit_count = register_gauge!(
-            "smem_audit_entries_count",
+            "smrust_audit_entries_count",
             "Current number of audit entries"
         ).map_err(|e| SecuraMemError::Internal(e.to_string()))?;
 

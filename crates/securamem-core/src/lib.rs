@@ -232,7 +232,7 @@ pub struct AuditConfig {
 impl Default for AuditConfig {
     fn default() -> Self {
         Self {
-            database_path: std::path::PathBuf::from(".securamem/audit.db"),
+            database_path: std::path::PathBuf::from(".securamemrust/audit.db"),
             retention_days: 2555, // 7 years (GDPR default)
             enable_rfc3161: false,
             tsa_url: None,
