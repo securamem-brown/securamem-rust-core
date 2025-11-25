@@ -4,7 +4,7 @@ use crate::{Result, SecuraMemError};
 use ed25519_dalek::{SigningKey, VerifyingKey};
 use rand_core::OsRng;
 use sha2::{Sha256, Digest};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 /// Identity manager for persistent node identity
 pub struct IdentityManager {
@@ -128,7 +128,6 @@ impl IdentityManager {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::PathBuf;
 
     #[test]
     fn test_identity_persistence() {

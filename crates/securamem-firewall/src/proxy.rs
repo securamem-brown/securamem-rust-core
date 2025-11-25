@@ -81,7 +81,8 @@ struct AppState {
     forbidden: Arc<ForbiddenConcepts>,
     openai_api_key: String,
     db: Arc<Database>,
-    // Store key_id for logging
+    /// Key ID for audit attribution (prefixed with _ to suppress warning if unused)
+    #[allow(dead_code)]
     key_id: String,
 }
 

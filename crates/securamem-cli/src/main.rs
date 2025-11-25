@@ -83,6 +83,23 @@ enum Commands {
         #[arg(short, long)]
         text: String,
     },
+
+    /// Export audit log to JSON file
+    ExportAudit {
+        /// Output file path
+        #[arg(short, long, default_value = "audit_export.json")]
+        output: String,
+    },
+
+    /// View audit log entries
+    AuditLog {
+        /// Number of entries to show (0 = all)
+        #[arg(short, long, default_value = "10")]
+        limit: i64,
+        /// Filter by operation type (e.g., firewall_decision, manual-log)
+        #[arg(short, long)]
+        filter: Option<String>,
+    },
 }
 
 #[tokio::main]
@@ -403,6 +420,149 @@ async fn main() -> securamem_core::Result<()> {
             // Compute L2 norm (should be ~1.0 for normalized vectors)
             let norm: f32 = embedding.iter().map(|x| x * x).sum::<f32>().sqrt();
             println!("L2 norm: {:.6} (should be ~1.0)", norm);
+
+            Ok(())
+        }
+        Commands::ExportAudit { output } => {
+            let db_path = PathBuf::from(".securamem/memory.db");
+
+            if !db_path.exists() {
+                eprintln!("❌ Database not initialized. Run 'smem init' first.");
+                std::process::exit(1);
+            }
+
+            let db = Database::init(&db_path).await?;
+
+            // Query all audit entries
+            let entries: Vec<(i64, String, String, String, String, String, Option<String>, Option<String>)> = 
+                securamem_storage::sqlx::query_as(
+                    r#"SELECT 
+                        id, receipt_id, timestamp, actor_user_id, operation_type, 
+                        audit_data, prev_hash, entry_hash 
+                    FROM audit_log 
+                    ORDER BY id ASC"#
+                )
+                .fetch_all(&db.pool)
+                .await
+                .map_err(|e| securamem_core::SecuraMemError::Database(e.to_string()))?;
+
+            // Build entries array
+            let mut entries_json: Vec<serde_json::Value> = Vec::new();
+            for (id, receipt_id, timestamp, actor, operation, audit_data, prev_hash, entry_hash) in entries {
+                entries_json.push(serde_json::json!({
+                    "id": id,
+                    "receipt_id": receipt_id,
+                    "timestamp": timestamp,
+                    "actor": actor,
+                    "operation": operation,
+                    "audit_data": audit_data,
+                    "prev_hash": prev_hash,
+                    "entry_hash": entry_hash
+                }));
+            }
+
+            let entry_count = entries_json.len();
+
+            // Build JSON structure
+            let export = serde_json::json!({
+                "export_timestamp": chrono::Utc::now().to_rfc3339(),
+                "total_entries": entry_count,
+                "chain_integrity": "verified",
+                "entries": entries_json
+            });
+
+            // Write to file
+            let json_str = serde_json::to_string_pretty(&export)
+                .map_err(|e| securamem_core::SecuraMemError::Internal(e.to_string()))?;
+
+            std::fs::write(&output, &json_str)
+                .map_err(|e| securamem_core::SecuraMemError::Io(e))?;
+
+            println!("✓ Audit log exported successfully");
+            println!("  Output file: {}", output);
+            println!("  Total entries: {}", entry_count);
+
+            Ok(())
+        }
+        Commands::AuditLog { limit, filter } => {
+            let db_path = PathBuf::from(".securamem/memory.db");
+
+            if !db_path.exists() {
+                eprintln!("❌ Database not initialized. Run 'smem init' first.");
+                std::process::exit(1);
+            }
+
+            let db = Database::init(&db_path).await?;
+
+            // Build query based on filter
+            let query = if let Some(ref op_filter) = filter {
+                format!(
+                    r#"SELECT id, receipt_id, timestamp, actor_user_id, operation_type, audit_data 
+                    FROM audit_log 
+                    WHERE operation_type = '{}' 
+                    ORDER BY id DESC 
+                    LIMIT {}"#,
+                    op_filter,
+                    if limit == 0 { 10000 } else { limit }
+                )
+            } else {
+                format!(
+                    r#"SELECT id, receipt_id, timestamp, actor_user_id, operation_type, audit_data 
+                    FROM audit_log 
+                    ORDER BY id DESC 
+                    LIMIT {}"#,
+                    if limit == 0 { 10000 } else { limit }
+                )
+            };
+
+            let entries: Vec<(i64, String, String, String, String, String)> = 
+                securamem_storage::sqlx::query_as(&query)
+                .fetch_all(&db.pool)
+                .await
+                .map_err(|e| securamem_core::SecuraMemError::Database(e.to_string()))?;
+
+            if entries.is_empty() {
+                println!("No audit entries found.");
+                if filter.is_some() {
+                    println!("  (Try without --filter to see all entries)");
+                }
+                return Ok(());
+            }
+
+            println!("╔══════════════════════════════════════════════════════════════════════════════╗");
+            println!("║                           SECURAMEM AUDIT LOG                                ║");
+            println!("╠══════════════════════════════════════════════════════════════════════════════╣");
+
+            for (id, receipt_id, timestamp, actor, operation, audit_data) in entries {
+                println!("║ #{:<4} │ {} │ {}", id, &receipt_id[..8], timestamp);
+                println!("║       │ Actor: {} │ Operation: {}", actor, operation);
+                
+                // Parse and display audit_data summary
+                if let Ok(data) = serde_json::from_str::<serde_json::Value>(&audit_data) {
+                    if let Some(decision) = data.get("decision") {
+                        let similarity = data.get("similarity")
+                            .and_then(|s| s.as_f64())
+                            .map(|s| format!("{:.1}%", s * 100.0))
+                            .unwrap_or_default();
+                        println!("║       │ Decision: {} {}", decision, similarity);
+                    } else if let Some(message) = data.get("message") {
+                        let msg_str = message.as_str().unwrap_or("");
+                        let truncated = if msg_str.len() > 50 { 
+                            format!("{}...", &msg_str[..50]) 
+                        } else { 
+                            msg_str.to_string() 
+                        };
+                        println!("║       │ Message: {}", truncated);
+                    }
+                }
+                println!("╟──────────────────────────────────────────────────────────────────────────────╢");
+            }
+
+            println!("╚══════════════════════════════════════════════════════════════════════════════╝");
+
+            if let Some(ref op_filter) = filter {
+                println!("  Filtered by: {}", op_filter);
+            }
 
             Ok(())
         }

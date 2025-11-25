@@ -2541,6 +2541,7 @@ dependencies = [
 name = "securamem-cli"
 version = "2.0.0"
 dependencies = [
+ "chrono",
  "clap",
  "ed25519-dalek",
  "pkcs8",
@@ -2551,6 +2552,7 @@ dependencies = [
  "securamem-l1",
  "securamem-l3",
  "securamem-storage",
+ "serde_json",
  "tokio",
  "tracing",
  "tracing-subscriber",
