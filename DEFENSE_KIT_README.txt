@@ -10,7 +10,7 @@ CRITICAL: This binary is hardware-locked using cryptographic node-locking.
 └───────────────────────────────────────────────────────────────────────┘
 
 Windows:
-    smrust.exe machine-id
+    smem.exe machine-id
 
 macOS/Linux:
     ./smem machine-id
@@ -34,10 +34,10 @@ and ensures compliance with SOC 2 Type II audit requirements.
 │ STEP 3: INSTALL THE LICENSE                                           │
 └───────────────────────────────────────────────────────────────────────┘
 
-Place the received license.key file in the same directory as smrust.exe:
+Place the received license.key file in the same directory as smem.exe:
 
     SecuraMem_Defense_Kit_v2/
-    ├── smrust.exe           (100 MB - The Sovereign Binary)
+    ├── smem.exe           (100 MB - The Sovereign Binary)
     └── license.key        (Your hardware-locked license)
 
 ┌───────────────────────────────────────────────────────────────────────┐
@@ -45,13 +45,13 @@ Place the received license.key file in the same directory as smrust.exe:
 └───────────────────────────────────────────────────────────────────────┘
 
 # Initialize database and cryptographic identity
-smrust.exe init
+smem.exe init
 
 # Verify installation
-smrust.exe status
+smem.exe status
 
 # Test embedding generation (384D ONNX model)
-smrust.exe test-embedding --text "Hello world"
+smem.exe test-embedding --text "Hello world"
 
 Expected: 384-dimensional vector with L2 norm = 1.000000
 
@@ -61,7 +61,7 @@ Expected: 384-dimensional vector with L2 norm = 1.000000
 
 # Start the AI firewall (requires OPENAI_API_KEY)
 set OPENAI_API_KEY=sk-...
-smrust.exe firewall --port 3051
+smem.exe firewall --port 3051
 
 # In another terminal, send a benign request:
 curl http://localhost:3051/v1/chat/completions \
@@ -82,7 +82,7 @@ Expected: HTTP 403 Forbidden with semantic threat details
 └───────────────────────────────────────────────────────────────────────┘
 
 # Verify cryptographic integrity of entire audit chain
-smrust.exe verify
+smem.exe verify
 
 Expected Output:
     ✓ AUDIT CHAIN INTEGRITY CONFIRMED
@@ -92,10 +92,10 @@ Expected Output:
       All signatures valid: TRUE
 
 # Export audit trail for compliance reporting
-smrust.exe export-audit --output audit_report.json
+smem.exe export-audit --output audit_report.json
 
 # View recent firewall decisions
-smrust.exe audit-log --limit 10 --filter firewall_decision
+smem.exe audit-log --limit 10 --filter firewall_decision
 
 ┌───────────────────────────────────────────────────────────────────────┐
 │ SYSTEM ARCHITECTURE                                                    │
@@ -236,7 +236,7 @@ jeremy@securamem.com with your requirements.
 
 Build Date:     2025-11-19
 Version:        2.0.0
-Binary Hash:    (Run: certutil -hashfile smrust.exe SHA256)
+Binary Hash:    (Run: certutil -hashfile smem.exe SHA256)
 Status:         PRODUCTION READY ✅
 
 ═══════════════════════════════════════════════════════════════════════

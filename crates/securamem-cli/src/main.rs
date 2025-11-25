@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use securamem_storage::Database;
 
 #[derive(Parser)]
-#[command(name = "smrust")]
+#[command(name = "smem")]
 #[command(version = "2.0.0")]
 #[command(about = "SecuraMem - AI Black Box Recorder (Audit-Only)", long_about = None)]
 struct Cli {
@@ -140,7 +140,7 @@ async fn main() -> securamem_core::Result<()> {
 
     match cli.command {
         Commands::Init => {
-            let db_path = PathBuf::from(".securamemrust/memory.db");
+            let db_path = PathBuf::from(".securamem/memory.db");
 
             tracing::info!("Initializing SecuraMem storage...");
 
@@ -155,11 +155,11 @@ async fn main() -> securamem_core::Result<()> {
             Ok(())
         }
         Commands::Log { message } => {
-            let db_path = PathBuf::from(".securamemrust/memory.db");
+            let db_path = PathBuf::from(".securamem/memory.db");
 
             // Check if database exists
             if !db_path.exists() {
-                tracing::error!("Database not initialized. Run 'smrust init' first.");
+                tracing::error!("Database not initialized. Run 'smem init' first.");
                 return Ok(());
             }
 
@@ -167,7 +167,7 @@ async fn main() -> securamem_core::Result<()> {
             let db = Database::init(&db_path).await?;
 
             // Generate or load signing key (for MVP, generate a temp key)
-            // TODO: In production, load from .securamemrust/keys/
+            // TODO: In production, load from .securamem/keys/
             let key = securamem_crypto::SecuraMemSigningKey::generate();
 
             // Create orchestrator
@@ -188,11 +188,11 @@ async fn main() -> securamem_core::Result<()> {
             Ok(())
         }
         Commands::Verify { all: _ } => {
-            let db_path = PathBuf::from(".securamemrust/memory.db");
+            let db_path = PathBuf::from(".securamem/memory.db");
 
             // Check if database exists
             if !db_path.exists() {
-                tracing::error!("Database not initialized. Run 'smrust init' first.");
+                tracing::error!("Database not initialized. Run 'smem init' first.");
                 return Ok(());
             }
 
@@ -226,11 +226,11 @@ async fn main() -> securamem_core::Result<()> {
             Ok(())
         }
         Commands::Serve { port } => {
-            let db_path = PathBuf::from(".securamemrust/memory.db");
+            let db_path = PathBuf::from(".securamem/memory.db");
 
             // Check if database exists
             if !db_path.exists() {
-                tracing::error!("Database not initialized. Run 'smrust init' first.");
+                tracing::error!("Database not initialized. Run 'smem init' first.");
                 return Ok(());
             }
 
@@ -247,12 +247,12 @@ async fn main() -> securamem_core::Result<()> {
             Ok(())
         }
         Commands::Status => {
-            let db_path = PathBuf::from(".securamemrust/memory.db");
+            let db_path = PathBuf::from(".securamem/memory.db");
 
             // Check if database exists
             if !db_path.exists() {
                 println!("SecuraMem Status: NOT INITIALIZED");
-                println!("  Run 'smrust init' to initialize the audit log.");
+                println!("  Run 'smem init' to initialize the audit log.");
                 return Ok(());
             }
 
@@ -351,12 +351,12 @@ async fn main() -> securamem_core::Result<()> {
             tracing::info!("Starting SecuraMem Firewall (NeuroWall) with audit logging...");
 
             let root_dir = std::env::current_dir()?;
-            let keys_dir = root_dir.join(".securamemrust/keys");
-            let db_path = root_dir.join(".securamemrust/memory.db");
+            let keys_dir = root_dir.join(".securamem/keys");
+            let db_path = root_dir.join(".securamem/memory.db");
 
             // 1. Check database exists
             if !db_path.exists() {
-                tracing::error!("Database not initialized. Run 'smrust init' first.");
+                tracing::error!("Database not initialized. Run 'smem init' first.");
                 return Ok(());
             }
 

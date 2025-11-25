@@ -20,17 +20,17 @@ SecuraMem is an enterprise-grade AI security platform providing cryptographic au
 
 ```bash
 # Initialize database and identity
-./smrust init
+./smem init
 
 # Check system status
-./smrust status
+./smem status
 
 # Start semantic firewall
 export OPENAI_API_KEY=sk-...
-./smrust firewall --port 3051
+./smem firewall --port 3051
 
 # Verify audit chain integrity
-./smrust verify
+./smem verify
 ```
 
 ## Architecture
@@ -53,7 +53,7 @@ cargo clean
 # Release build (hardened profile)
 cargo build --release
 
-# Output: target/release/smrust.exe (100 MB)
+# Output: target/release/smem.exe (100 MB)
 ```
 
 ### Build Profile
@@ -80,14 +80,14 @@ overflow-checks = true   # Runtime safety
 ## Commands
 
 ```bash
-smrust init              # Initialize database and identity
-smrust status            # Show system status
-smrust verify            # Verify audit chain integrity
-smrust machine-id        # Show hardware fingerprint
-smrust firewall          # Start semantic firewall proxy
-smrust test-embedding    # Test embedding generation
-smrust serve             # Start L3 API server
-smrust log               # Log test event
+smem init              # Initialize database and identity
+smem status            # Show system status
+smem verify            # Verify audit chain integrity
+smem machine-id        # Show hardware fingerprint
+smem firewall          # Start semantic firewall proxy
+smem test-embedding    # Test embedding generation
+smem serve             # Start L3 API server
+smem log               # Log test event
 ```
 
 ## Documentation
@@ -101,7 +101,7 @@ smrust log               # Log test event
 ## Binary Verification
 
 ```bash
-certutil -hashfile smrust.exe SHA256
+certutil -hashfile smem.exe SHA256
 # Expected: f3fd2701a1bf8daff84b3d3faf5bf738a78fb6f4d1e2a9466dadcf9455728ab1
 ```
 

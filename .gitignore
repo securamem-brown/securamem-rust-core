@@ -24,6 +24,8 @@
 .securamemrust/*.key
 .securamemrust/*-key.json
 .securamemrust/signing-keys.json
+license.key
+*.pem
 
 # Configs (Ignore runtime configs, keep templates if needed)
 .securamemrust/config.json

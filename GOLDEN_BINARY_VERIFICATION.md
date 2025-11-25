@@ -11,7 +11,7 @@
 
 | Property | Value | Status |
 |----------|-------|--------|
-| **File Path** | `target/release/smrust.exe` | ✅ |
+| **File Path** | `target/release/smem.exe` | ✅ |
 | **File Size** | **100 MB** | ✅ PASS |
 | **SHA-256 Hash** | `f3fd2701a1bf8daff84b3d3faf5bf738a78fb6f4d1e2a9466dadcf9455728ab1` | ✅ |
 | **Platform** | Windows x86_64 | ✅ |
@@ -29,7 +29,7 @@
 
 ### Test 2: Speed Test (Release Optimization) ✅ PASS
 
-**Command**: `target/release/smrust.exe test-embedding --text "benchmark"`
+**Command**: `target/release/smem.exe test-embedding --text "benchmark"`
 
 **Results**:
 - **Cold Start**: 1.6 seconds (model load + SIMD activation)
@@ -46,9 +46,9 @@
 ### Test 3: Clean Install Simulation ✅ PASS
 
 **Test Environment**: Isolated directory (`~/Desktop/deploy_test`)
-**Files Deployed**: `smrust.exe` only (no dependencies)
+**Files Deployed**: `smem.exe` only (no dependencies)
 
-**Command**: `./smrust.exe status`
+**Command**: `./smem.exe status`
 
 **Expected Behavior**: Graceful license error (no DLL/runtime dependency errors)
 **Actual Output**:
@@ -122,7 +122,7 @@ overflow-checks = true   # ✅ Runtime integer overflow detection
 ### Fix #1: Persistent Identity (Chain-of-Custody)
 
 **Issue**: Random ephemeral identities breaking audit attribution
-**Fix Applied**: Load persistent identity from `.securamemrust/keys/private.pem`
+**Fix Applied**: Load persistent identity from `.securamem/keys/private.pem`
 
 **Code Location**: [crates/securamem-cli/src/main.rs:685](crates/securamem-cli/src/main.rs#L685)
 
@@ -176,7 +176,7 @@ orchestrator.log_event("NeuroWall", "firewall_decision", &log_message).await;
 ```
 SecuraMem_Defense_Kit_v2/
 ├── bin/
-│   └── smrust.exe                 (100 MB)
+│   └── smem.exe                 (100 MB)
 ├── docs/
 │   ├── DEFENSE_KIT_README.txt   (Installation guide)
 │   └── GOLDEN_BINARY_VERIFICATION.md (This document)
@@ -189,24 +189,24 @@ SecuraMem_Defense_Kit_v2/
 
 ```bash
 # 1. Generate machine ID
-smrust.exe machine-id
+smem.exe machine-id
 
 # 2. Request license (email to jeremy@securamem.com)
 
-# 3. Place license.key in same directory as smrust.exe
+# 3. Place license.key in same directory as smem.exe
 
 # 4. Initialize
-smrust.exe init
+smem.exe init
 
 # 5. Verify installation
-smrust.exe status
+smem.exe status
 
 # 6. Test embedding
-smrust.exe test-embedding --text "Hello world"
+smem.exe test-embedding --text "Hello world"
 
 # 7. Start firewall (requires OPENAI_API_KEY)
 set OPENAI_API_KEY=sk-...
-smrust.exe firewall --port 3051
+smem.exe firewall --port 3051
 ```
 
 ---

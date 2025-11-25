@@ -369,7 +369,7 @@ crates/securamem-firewall/
 │   └── proxy.rs                       # Firewall proxy server (245 lines)
 └── tests/
     ├── consistency_test.rs            # Test suite (150 lines)
-    └── parity_test.rs                 # Node.js parity tests (placeholder)
+    └── parity_test.rs                 # Node.js parity tests (REMOVED IN FINAL BUILD)
 
 scripts/
 ├── test-embedding-standalone.cjs      # Node.js reference generator
