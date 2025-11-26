@@ -55,3 +55,7 @@ Thumbs.db
 
 # Defense Kit binaries (too large for GitHub - distribute separately)
 SecuraMem_Defense_Kit_v2.0_Win64/smrust.exe
+
+# Demo folder (contains personalized/generated content for prospects)
+demo/
+demo_audit_export.json
