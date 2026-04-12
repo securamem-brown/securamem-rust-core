@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeremy J.A.Brown — AI Governance Professional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #080c18;
+  --surface:  #0d1225;
+  --surface2: #121933;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --gold:     #c9a84c;
+  --gold-dim: rgba(201,168,76,0.15);
+  --gold-glow:rgba(201,168,76,0.06);
+  --blue:     #4a9eff;
+  --blue-dim: rgba(74,158,255,0.12);
+  --text:     #ede9e1;
+  --muted:    #7a8499;
+  --faint:    #3a4255;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ─── NOISE TEXTURE OVERLAY ────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ─── NAVIGATION ─────────────────────────────────────────────*/
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 3rem;
+  background: rgba(8,12,24,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s ease;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 0.45rem 1.1rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-cta:hover { background: var(--gold); color: var(--bg); }
+
+/* ─── HERO ───────────────────────────────────────────────────*/
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 3rem 5rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+}
+.hero-glow {
+  position: absolute;
+  top: 20%;
+  left: -10%;
+  width: 55%;
+  height: 55%;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-glow2 {
+  position: absolute;
+  bottom: 10%;
+  right: -5%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(ellipse, rgba(74,158,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 900px; }
+.hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+.hero-tag::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+}
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.4s forwards;
+}
+.hero-name em {
+  font-style: italic;
+  color: var(--gold);
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 400;
+  color: var(--muted);
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.55s forwards;
+}
+.hero-statement {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--text);
+  max-width: 620px;
+  line-height: 1.85;
+  border-left: 2px solid var(--gold);
+  padding-left: 1.5rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.7s forwards;
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.85s forwards;
+}
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+}
+.badge.gold { border-color: rgba(201,168,76,0.4); color: var(--gold); }
+.badge.blue { border-color: rgba(74,158,255,0.35); color: var(--blue); }
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 1s forwards;
+}
+.btn-primary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--gold);
+  padding: 0.85rem 2rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.88; }
+.btn-ghost {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  border: 1px solid var(--border2);
+  padding: 0.85rem 2rem;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+.scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--faint);
+  opacity: 0;
+  animation: fadeUp 1s ease 1.3s forwards;
+}
+.scroll-line {
+  width: 40px;
+  height: 1px;
+  background: var(--faint);
+  animation: scrollPulse 2s ease-in-out 2s infinite;
+}
+
+/* ─── SECTIONS COMMON ────────────────────────────────────────*/
+section { padding: 6rem 3rem; position: relative; z-index: 1; }
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.section-title em { font-style: italic; color: var(--gold); }
+.section-intro {
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 580px;
+  line-height: 1.8;
+  margin-bottom: 4rem;
+}
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+
+/* ─── ABOUT / POSITIONING ────────────────────────────────────*/
+#about { background: var(--surface); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.about-text p {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--text);
+  margin-bottom: 1.4rem;
+  font-weight: 300;
+}
+.about-text p strong { color: var(--gold); font-weight: 500; }
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 0.5rem;
+}
+.stat-card {
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  background: var(--surface2);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--gold);
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── JOURNEY TIMELINE ───────────────────────────────────────*/
+#journey { background: var(--bg); }
+.timeline { max-width: 860px; position: relative; padding-left: 2rem; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--border2) 10%, var(--border2) 90%, transparent);
+}
+.timeline-entry {
+  position: relative;
+  padding: 0 0 3.5rem 2.5rem;
+  opacity: 0;
+  transform: translateX(-16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.timeline-entry.visible { opacity: 1; transform: translateX(0); }
+.timeline-dot {
+  position: absolute;
+  left: -5px;
+  top: 6px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--faint);
+  transition: border-color 0.3s, background 0.3s;
+}
+.timeline-entry:hover .timeline-dot {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+.timeline-era {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.timeline-role {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.timeline-org {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+}
+.timeline-body {
+  font-size: 0.93rem;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 600px;
+}
+.timeline-body strong { color: var(--text); font-weight: 400; }
+.timeline-awards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+.award-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  background: var(--gold-dim);
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.2);
+}
+
+/* ─── CAPABILITIES / EDGE ────────────────────────────────────*/
+#capabilities { background: var(--surface); }
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  max-width: 1100px;
+}
+.cap-card {
+  background: var(--surface);
+  padding: 2.2rem;
+  transition: background 0.25s;
+  cursor: default;
+}
+.cap-card:hover { background: var(--surface2); }
+.cap-icon {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cap-icon::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--gold);
+}
+.cap-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.8rem;
+  line-height: 1.2;
+}
+.cap-body {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.cap-body strong { color: var(--text); font-weight: 400; }
+.cap-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+.cap-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ─── TECH STACK ─────────────────────────────────────────────*/
+#stack { background: var(--bg); }
+.stack-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 900px;
+}
+.stack-group-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 0.75rem;
+}
+.stack-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--border2);
+  color: var(--text);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.pill:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+.pill.blue-pill { border-color: rgba(74,158,255,0.25); color: var(--blue); }
+.pill.blue-pill:hover { background: var(--blue-dim); border-color: var(--blue); }
+
+/* ─── APP SHOWCASE ───────────────────────────────────────────*/
+#showcase { background: var(--surface); }
+.showcase-featured {
+  max-width: 1100px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  position: relative;
+  overflow: hidden;
+}
+.showcase-featured::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--blue), transparent);
+}
+.featured-header {
+  padding: 2.5rem 3rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+.featured-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem;
+  font-weight: 300;
+  color: var(--gold-dim);
+  line-height: 1;
+}
+.featured-title-group { flex: 1; }
+.featured-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.featured-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.featured-body {
+  padding: 2rem 3rem 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+}
+.featured-problem {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.featured-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.stat-block {
+  border-left: 1px solid var(--border2);
+  padding-left: 1rem;
+}
+.stat-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.2;
+}
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+.featured-tech {
+  padding: 0 3rem 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.tech-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  transition: color 0.2s, border-color 0.2s;
+}
+.tech-tag.gold { border-color: rgba(201,168,76,0.3); color: var(--gold); }
+.tech-tag.blue { border-color: rgba(74,158,255,0.25); color: var(--blue); }
+.featured-link {
+  padding: 0 3rem 2.5rem;
+}
+.featured-link a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201,168,76,0.3);
+  padding-bottom: 0.15rem;
+  transition: border-color 0.2s;
+}
+.featured-link a:hover { border-color: var(--gold); }
+@media (max-width: 768px) {
+  .featured-body { grid-template-columns: 1fr; }
+  .featured-header { padding: 2rem 1.5rem 0; }
+  .featured-body { padding: 1.5rem; }
+  .featured-tech, .featured-link { padding: 0 1.5rem 1.5rem; }
+}
+
+/* ─── BLOG / BUILDING ────────────────────────────────────────*/
+#building { background: var(--bg); }
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  max-width: 860px;
+}
+.blog-entry {
+  padding: 2rem 2.2rem;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 2rem;
+  align-items: start;
+  transition: background 0.2s;
+}
+.blog-entry:last-child { border-bottom: none; }
+.blog-entry:hover { background: var(--surface2); }
+.blog-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding-top: 0.3rem;
+  line-height: 1.6;
+}
+.blog-date span {
+  display: block;
+  color: var(--gold);
+  font-size: 0.68rem;
+  margin-bottom: 0.3rem;
+}
+.blog-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.blog-excerpt {
+  font-size: 0.87rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 0.8rem;
+}
+.blog-framework {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-dim);
+  padding: 0.2rem 0.6rem;
+  display: inline-block;
+}
+
+/* ─── ROADMAP ────────────────────────────────────────────────*/
+#roadmap { background: var(--surface); }
+.roadmap-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  max-width: 1000px;
+  position: relative;
+}
+.roadmap-track::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--border2);
+  z-index: 0;
+}
+.roadmap-node {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  padding: 0 1rem;
+}
+.node-dot {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  color: var(--faint);
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+.node-dot.done {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+.node-dot.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-dim);
+  box-shadow: 0 0 0 6px var(--gold-glow);
+}
+.node-dot.next {
+  border-color: rgba(74,158,255,0.35);
+  color: var(--blue);
+  background: var(--blue-dim);
+}
+.node-dot.future { border-color: var(--border2); }
+.node-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+.node-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.node-status {
+  margin-top: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.status-done { color: var(--gold); }
+.status-active { color: var(--gold); }
+.status-next { color: var(--blue); }
+.status-future { color: var(--faint); }
+
+/* ─── CONTACT ────────────────────────────────────────────────*/
+#contact { background: var(--bg); text-align: center; padding: 7rem 3rem; }
+.contact-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+.contact-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+.contact-heading em { font-style: italic; color: var(--gold); }
+.contact-sub {
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto 3rem;
+  line-height: 1.8;
+}
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.contact-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.85rem 2rem;
+  transition: all 0.2s;
+}
+.contact-link.primary {
+  background: var(--gold);
+  color: var(--bg);
+}
+.contact-link.primary:hover { opacity: 0.88; }
+.contact-link.ghost {
+  border: 1px solid var(--border2);
+  color: var(--muted);
+}
+.contact-link.ghost:hover { border-color: var(--gold); color: var(--gold); }
+.contact-note {
+  margin-top: 3rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────────*/
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.footer-copy {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.footer-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: var(--faint);
+  font-style: italic;
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────────────────*/
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scrollPulse {
+  0%, 100% { width: 40px; opacity: 0.4; }
+  50%       { width: 60px; opacity: 0.8; }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────*/
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  section { padding: 4rem 1.5rem; }
+  #hero { padding: 7rem 1.5rem 4rem; }
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .capabilities-grid { grid-template-columns: 1fr; }
+  .roadmap-track { flex-direction: column; gap: 2rem; }
+  .roadmap-track::before { display: none; }
+  .roadmap-node { flex-direction: row; align-items: flex-start; text-align: left; gap: 1.2rem; }
+  .node-dot { flex-shrink: 0; margin-bottom: 0; }
+  footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+  .blog-entry { grid-template-columns: 1fr; gap: 0.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<nav>
+  <a href="#hero" class="nav-logo">Jeremy J.A Brown / AI Governance</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#capabilities">Edge</a></li>
+    <li><a href="#showcase">Showcase</a></li>
+    <li><a href="#building">Building</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Work With Me</a>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">Pickering, Ontario · AI Governance · Risk · Compliance</div>
+    <h1 class="hero-name">Jeremy J.A.<br><em>Brown</em></h1>
+    <p class="hero-title">Self-Taught Builder · AI Governance Professional · Financial Services Veteran</p>
+    <p class="hero-statement">
+      No CS degree. No tech background. I picked up programming during the 2021 lockdown because I was bored — and never stopped. Five years later I have 85+ repositories, 45+ shipped prototypes, and two desktop applications I built from scratch in Rust. I battle-test every idea across multiple LLMs, iterate obsessively, and then build it to see if it actually works. That relentless prototyping habit, layered on top of 12 years in regulated financial services, is what I bring to AI governance.
+    </p>
+    <div class="hero-badges">
+      <span class="badge gold">AIGP Candidate</span>
+      <span class="badge gold">CIPM (Planned)</span>
+      <span class="badge blue">Self-Taught Since 2021 Lockdown</span>
+      <span class="badge blue">45+ AI Prototypes Shipped</span>
+      <span class="badge blue">Claude Code · Cursor · Antigravity</span>
+      <span class="badge">12yrs Financial Services</span>
+      <span class="badge">8yrs Owner / Operator</span>
+    </div>
+    <div class="hero-actions">
+      <a href="#showcase" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-ghost">Let's Talk</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── ABOUT ─────────────────────────────────────────────────── -->
+<section id="about">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-label">The position</div>
+    <h2 class="section-title">No degree.<br>No background.<br><em>No excuses.</em></h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I do not have a Computer Science degree. I have no formal tech background. I am a self-taught tech enthusiast who picked up programming during the 2021 COVID lockdown because I was bored, curious, and had nothing better to do — and then discovered I could not stop building things.</p>
+        <p>Before that, I spent over a decade in <strong>regulated financial services</strong> — managing complex insurance products under AML/KYC obligations, handling sensitive personal financial data, and building client relationships in an environment where a single documentation error had regulatory consequences. I know what living under compliance pressure actually feels like.</p>
+        <p>What happened next was unexpected. I became <strong>obsessed with prototyping</strong>. My process: take an idea, battle-test it across multiple LLMs — Claude, GPT, Gemini, local models — with different prompts and different approaches, iterate relentlessly, and then just build it to see if it works. That cycle, repeated hundreds of times across 85+ repositories and 45+ shipped MVPs, gave me a technical fluency that no bootcamp could have delivered.</p>
+        <p>That combination — <strong>real regulatory experience earned in the field</strong>, plus the technical intuition of someone who has shipped dozens of AI-assisted applications — is the edge I bring to AI governance. I do not need to ask the engineering team to translate. I can sit in the conversation and contribute directly, because I have built the same kinds of systems they build.</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-num">12+</div>
+          <div class="stat-label">Years in regulated financial services</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">45+</div>
+          <div class="stat-label">AI-assisted apps shipped from ideation to MVP</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">85+</div>
+          <div class="stat-label">GitHub repositories of functional prototypes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">5</div>
+          <div class="stat-label">Industry recognitions for top-tier performance</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── JOURNEY ───────────────────────────────────────────────── -->
+<section id="journey">
+  <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 5rem;">
+    <div>
+      <div class="section-label">The story</div>
+      <h2 class="section-title">A career<br>built in<br><em>layers</em></h2>
+      <p style="font-size:0.95rem; color:var(--muted); line-height:1.85; margin-top:1rem;">
+        Every chapter of this journey contributed something distinct to my understanding of how systems — human, financial, digital — succeed and fail. That accumulated understanding is what makes governance instinct, not theory.
+      </p>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-entry">
+        <div class="timeline-dot"></div>
+        <div class="timeline-era">1993 – 1995</div>
+        <div class="timeline-role">Credit & Collections Officer</div>
+        <div class="timeline-org">T. Geddes Grant Distributors Ltd., Jamaica</div>
+        <div class="timeline-body">First exposure to structured risk frameworks — evaluating creditworthiness, managing portfolio exposure, and learning that <strong>policy only works when it is consistently applied</strong>. Built the habit of documentation accuracy under consequence.</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-dot"></div>
+        <div class="timeline-era">1995 – 1998</div>
+        <div class="timeline-role">Administrative Assistant</div>
+        <div class="timeline-org">JCB Customs Brokers & Freight Forwarders, Jamaica</div>
+        <div class="timeline-body">Worked inside a regulatory and compliance-driven logistics environment — customs declarations, freight documentation, multi-agency coordination. Learned that <strong>information handling has legal weight</strong> and that chain-of-custody matters.</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-dot"></div>
+        <div class="timeline-era">1998 – 1999</div>
+        <div class="timeline-role">Dock Supervisor</div>
+        <div class="timeline-org">Kingston Container Terminal, Jamaica</div>
+        <div class="timeline-body">Led teams in a high-stakes, safety-critical environment. Introduced to the operational reality that <strong>risk management is not a document — it is a culture</strong>. The consequences of non-compliance here were physical and immediate.</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-dot"></div>
+        <div class="timeline-era">2001 – 2004</div>
+        <div class="timeline-role">Accounting Clerk</div>
+        <div class="timeline-org">Sagicor Life, Jamaica</div>
+        <div class="timeline-body">Developed rigorous financial data management habits — reconciliation, audit trails, discrepancy identification. Built the quantitative foundation that later informed financial modelling and business case development. First sustained exposure to <strong>regulatory reporting obligations</strong>.</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-dot"></div>
+        <div class="timeline-era">2004 – 2012</div>
+        <div class="timeline-role">Financial Advisor</div>
+        <div class="timeline-org">Sagicor Life, Jamaica</div>
+        <div class="timeline-body">The defining chapter. Twelve years total with Sagicor, operating in one of the most regulated industries on earth — <strong>life insurance under AML/KYC obligations</strong>, personal financial data management, fiduciary responsibility, and client trust as the core product. Results were exceptional across all measured dimensions.
+          <div class="timeline-awards">
+            <span class="award-chip">Million Dollar Round Table</span>
+            <span class="award-chip">Executive Club — Top 30 / 700</span>
+            <span class="award-chip">Most Improved Agent +70%</span>
+            <span class="award-chip">Century Club</span>
+            <span class="award-chip">Caraifa Quality Award</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-dot"></div>
+        <div class="timeline-era">2010 – 2015</div>
+        <div class="timeline-role">Web & Mobile App Developer</div>
+        <div class="timeline-org">Freelance — Mobile Web Design, Jamaica</div>
+        <div class="timeline-body">Built websites and mobile applications for clients across multiple industries. A standout engagement: a mobile referral platform for a medical imaging company that <strong>drove a 35% revenue increase</strong>. Began developing the builder instinct that now defines my AI prototyping practice.</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-dot"></div>
+        <div class="timeline-era">2017 – Present</div>
+        <div class="timeline-role">Owner / Operator</div>
+        <div class="timeline-org">DND Haulage – 12196280 Canada Inc., Vaughan, ON</div>
+        <div class="timeline-body">Founded and operate an incorporated transportation business — full P&L ownership, MTO regulatory compliance, contract management, insurance obligations, and operational risk. Running a regulated Canadian business built <strong>accountability at every level</strong>, and the perspective that compliance is not overhead — it is the business.</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-dot"></div>
+        <div class="timeline-era">2021 – Present</div>
+        <div class="timeline-role">Self-Taught AI Product Developer</div>
+        <div class="timeline-org">Independent — FinTech · InsurTech · GRC</div>
+        <div class="timeline-body">Started during the 2021 COVID lockdown out of pure boredom and curiosity — no CS degree, no bootcamp, no tech background. Became obsessed with building. My process: prototype an idea, <strong>battle-test it across multiple LLMs</strong> (Claude, GPT, Gemini, local models via Ollama and LM Studio) with different prompts and re-iterations, then build it end-to-end to see if it works. 85+ GitHub repositories. 45+ functional MVPs shipped. Gravitated toward <strong>AI governance tooling and compliance workflow applications</strong> because that is where my financial services experience and my building obsession converge. Currently iterating my GRC Command Center toward production readiness — the one tool I have been tinkering with and refining since the beginning.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CAPABILITIES ──────────────────────────────────────────── -->
+<section id="capabilities">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-label">The edge</div>
+    <h2 class="section-title">What I bring that<br><em>others don't</em></h2>
+    <p class="section-intro">Three distinct capability pillars that converge into a single, rare profile for AI governance, risk, and compliance work.</p>
+    <div class="capabilities-grid">
+
+      <div class="cap-card">
+        <div class="cap-icon">01 — Regulatory DNA</div>
+        <div class="cap-title">Lived-in Compliance Instinct</div>
+        <div class="cap-body">I did not learn AML/KYC from a training module. I applied it, daily, in a sector where errors had regulatory, legal, and financial consequences. I understand <strong>why governance frameworks exist</strong> — not because I read about them, but because I operated inside the environment they were designed to protect. That intuition is the difference between a governance professional who flags issues on paper and one who prevents them from occurring.</div>
+        <div class="cap-tags">
+          <span class="cap-tag">AML / KYC</span>
+          <span class="cap-tag">PIPEDA</span>
+          <span class="cap-tag">Fiduciary Compliance</span>
+          <span class="cap-tag">Regulatory Reporting</span>
+          <span class="cap-tag">Risk Assessment</span>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-icon">02 — Builder Fluency</div>
+        <div class="cap-title">Self-Taught. No Degree. No Excuses.</div>
+        <div class="cap-body">I started coding during the 2021 lockdown with zero technical background. No CS degree. No bootcamp. Just boredom, curiosity, and a refusal to stop once I started. My process is obsessive: I take an idea, <strong>battle-test it across every major LLM</strong> — Claude, GPT, Gemini, local models — with different prompts, different approaches, and relentless re-iteration. Then I build it end-to-end to see if it works. That cycle, repeated across 45+ shipped MVPs, gave me the ability to read what an AI system is doing, interrogate its outputs, identify failure modes, and audit its behaviour. A governance professional who builds the same systems they govern does not need a translator in the room.</div>
+        <div class="cap-tags">
+          <span class="cap-tag">LLM Evaluation</span>
+          <span class="cap-tag">AI Auditing</span>
+          <span class="cap-tag">Prompt Engineering</span>
+          <span class="cap-tag">Multi-Agent Systems</span>
+          <span class="cap-tag">Bias & Risk Testing</span>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-icon">03 — Operational Ownership</div>
+        <div class="cap-title">The Accountability That Only Comes From Running Something</div>
+        <div class="cap-body">As the owner of an incorporated business, I manage <strong>every dimension of operational risk simultaneously</strong> — contracts, insurance, regulatory compliance, financial performance, and stakeholder relationships. That experience produces a specific kind of judgment: the ability to weigh competing obligations, make decisions under uncertainty, and own the outcomes fully. This is not a skill that is taught in governance certification programs. It is earned.</div>
+        <div class="cap-tags">
+          <span class="cap-tag">P&L Management</span>
+          <span class="cap-tag">Operational Risk</span>
+          <span class="cap-tag">Contract Oversight</span>
+          <span class="cap-tag">Business Continuity</span>
+          <span class="cap-tag">Stakeholder Management</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── STACK ─────────────────────────────────────────────────── -->
+<section id="stack">
+  <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 5rem;">
+    <div>
+      <div class="section-label">Technical stack</div>
+      <h2 class="section-title">Tools I<br>build <em>with</em></h2>
+      <p style="font-size:0.9rem; color:var(--muted); line-height:1.8; margin-top:1rem;">Natural language to working MVP. These are the tools I use every day to prototype, test, and ship AI-powered applications — with particular focus on governance, compliance, and financial services use cases.</p>
+    </div>
+    <div class="stack-row">
+      <div>
+        <div class="stack-group-label">AI Development Environments</div>
+        <div class="stack-pills">
+          <span class="pill">Claude Code</span>
+          <span class="pill">Cursor IDE</span>
+          <span class="pill">Google Antigravity</span>
+          <span class="pill">VS Code + Local LLMs</span>
+          <span class="pill">Ollama</span>
+          <span class="pill">LM Studio</span>
+        </div>
+      </div>
+      <div>
+        <div class="stack-group-label">AI / LLM Capabilities</div>
+        <div class="stack-pills">
+          <span class="pill blue-pill">Prompt Engineering</span>
+          <span class="pill blue-pill">Chain-of-Thought (CoT)</span>
+          <span class="pill blue-pill">Multi-Agent Orchestration</span>
+          <span class="pill blue-pill">Model Context Protocol (MCP)</span>
+          <span class="pill blue-pill">RAG Pipelines</span>
+          <span class="pill blue-pill">AI Output Evaluation</span>
+        </div>
+      </div>
+      <div>
+        <div class="stack-group-label">Build Targets</div>
+        <div class="stack-pills">
+          <span class="pill">AI-Powered Web Apps</span>
+          <span class="pill">Rust Binaries</span>
+          <span class="pill">iOS / Android Apps</span>
+          <span class="pill">Compliance Workflow Tools</span>
+          <span class="pill">Financial Analysis Dashboards</span>
+        </div>
+      </div>
+      <div>
+        <div class="stack-group-label">Governance & Compliance Frameworks</div>
+        <div class="stack-pills">
+          <span class="pill">NIST AI RMF</span>
+          <span class="pill">ISO/IEC 42001</span>
+          <span class="pill">EU AI Act</span>
+          <span class="pill">PIPEDA / CPPA</span>
+          <span class="pill">AML / KYC</span>
+          <span class="pill">FINTRAC</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SHOWCASE ──────────────────────────────────────────────── -->
+<section id="showcase">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-label">What I've built</div>
+    <h2 class="section-title">The tools I use<br><em>every day</em></h2>
+    <p class="section-intro">Purpose-built desktop applications that replace ad-hoc spreadsheets and scattered bookmarks with structured, professional-grade systems for AI governance work.</p>
+    <div class="showcase-featured">
+
+      <div class="featured-header">
+        <div class="featured-number">01</div>
+        <div class="featured-title-group">
+          <div class="featured-name">GRC Command Center</div>
+          <div class="featured-type">AI Governance · Risk · Compliance — Desktop Application</div>
+        </div>
+      </div>
+
+      <div class="featured-body">
+        <div class="featured-problem">
+          An AI governance professional managing multiple client engagements cannot rely on memory or scattered documents to track hundreds of specific legal requirements across overlapping regulatory frameworks. The EU AI Act alone contains 83+ distinct obligations that vary by risk tier and supply-chain role. Multiply that across ISO 42001, ISO 23894, NIST AI RMF, and the OECD AI Principles — then across multiple clients, each with different AI systems and risk profiles — and the cognitive load becomes unmanageable without tooling.<br><br>
+          This application externalizes that cognitive load into a structured system. Every assessment decision, every status change, every piece of evidence is logged with an immutable audit trail. When a regulator or client asks "show me your diligence," the answer is the export from this tool.
+        </div>
+        <div class="featured-stats">
+          <div class="stat-block">
+            <div class="stat-value">241</div>
+            <div class="stat-label">Seeded Requirements</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Regulatory Frameworks</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">44</div>
+            <div class="stat-label">Backend Commands</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">9,600+</div>
+            <div class="stat-label">Lines of Rust</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">15</div>
+            <div class="stat-label">Application Pages</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">0</div>
+            <div class="stat-label">npm Dependencies</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="featured-tech">
+        <span class="tech-tag gold">EU AI Act</span>
+        <span class="tech-tag gold">ISO 42001</span>
+        <span class="tech-tag gold">ISO 23894</span>
+        <span class="tech-tag gold">NIST AI RMF</span>
+        <span class="tech-tag gold">OECD AI Principles</span>
+        <span class="tech-tag blue">Rust</span>
+        <span class="tech-tag blue">Tauri 2</span>
+        <span class="tech-tag blue">Leptos / WASM</span>
+        <span class="tech-tag blue">PostgreSQL</span>
+        <span class="tech-tag blue">SQLx</span>
+        <span class="tech-tag blue">AES-256-GCM</span>
+      </div>
+
+      <div class="featured-link">
+        <a href="https://github.com/jahboukie/grc-tool" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+      </div>
+
+    </div>
+
+    <!-- ── SHOWCASE #2: AI Technical Reference ── -->
+    <div class="showcase-featured" style="margin-top: 3rem;">
+
+      <div class="featured-header">
+        <div class="featured-number">02</div>
+        <div class="featured-title-group">
+          <div class="featured-name">AI Technical Reference</div>
+          <div class="featured-type">LLM Internals · Neural Networks · Governance — Desktop Knowledge Base</div>
+        </div>
+      </div>
+
+      <div class="featured-body">
+        <div class="featured-problem">
+          An AI governance professional cannot assess risk, review model cards, or hold credible conversations with ML engineers without understanding what's happening inside the systems they are governing. Commercial courses cover policy — this tool covers the technical substrate that policy regulates.<br><br>
+          36 chapters across six parts, each mapping technical concepts (attention mechanisms, RLHF, tokenisation, loss functions) directly to specific regulatory requirements — EU AI Act articles, ISO 42001 controls, and NIST AI RMF measures. Every chapter includes Mermaid diagrams, comparison tables, and a Governance Relevance callout with precise regulatory citations. Built as a standalone desktop application for offline access during assessments, audits, and interviews.
+        </div>
+        <div class="featured-stats">
+          <div class="stat-block">
+            <div class="stat-value">36</div>
+            <div class="stat-label">Technical Chapters</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Parts — Foundations to Regulation</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">4</div>
+            <div class="stat-label">Regulatory Frameworks Cross-Referenced</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">28,000+</div>
+            <div class="stat-label">Lines of Curated Content</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">100+</div>
+            <div class="stat-label">Mermaid Diagrams</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">0</div>
+            <div class="stat-label">npm Dependencies</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="featured-tech">
+        <span class="tech-tag gold">EU AI Act</span>
+        <span class="tech-tag gold">ISO 42001</span>
+        <span class="tech-tag gold">NIST AI RMF</span>
+        <span class="tech-tag gold">ISO 23894</span>
+        <span class="tech-tag blue">Rust</span>
+        <span class="tech-tag blue">Tauri 2</span>
+        <span class="tech-tag blue">mdBook</span>
+        <span class="tech-tag blue">Mermaid</span>
+        <span class="tech-tag">Transformers</span>
+        <span class="tech-tag">RLHF</span>
+        <span class="tech-tag">RAG</span>
+        <span class="tech-tag">Bias & Fairness</span>
+      </div>
+
+      <div class="featured-link">
+        <a href="https://github.com/jahboukie/AIGP-Reference-Tool" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+      </div>
+
+    </div>
+
+    <!-- ── SHOWCASE #3: SecuraMem Rust ── -->
+    <div class="showcase-featured" style="margin-top: 3rem;">
+
+      <div class="featured-header">
+        <div class="featured-number">03</div>
+        <div class="featured-title-group">
+          <div class="featured-name">SecuraMem Rust</div>
+          <div class="featured-type">AI Safety · Black Box Recorder · Sidecar Guardrail — CLI Application</div>
+        </div>
+      </div>
+
+      <div class="featured-body">
+        <div class="featured-problem">
+          <strong style="color:var(--gold); font-weight:500;">The problem:</strong> Every interaction with a large language model today is ephemeral. There is no cryptographic proof of what was asked, what was answered, or whether responses were tampered with after the fact. API providers can silently modify logs. Models can be updated between calls. And as the Mythos research demonstrated, an LLM can strategically hide its true chain of thought from the researchers who built it — appearing aligned by standard benchmarks while actually being better at concealing its intentions. Internal guardrails like RLHF and Constitutional AI live inside the same neural network and can be subverted from within. This is the fundamental accountability gap in AI deployment today.<br><br>
+
+          <strong style="color:var(--gold); font-weight:500;">The AIGP alignment:</strong> The EU AI Act (Articles 12, 14, 26) and ISO 42001 (Controls A.6.2.6, A.6.2.7) require that high-risk AI systems maintain logs of system behavior, enable human oversight, and provide traceable evidence of compliance. NIST AI RMF (Govern 1.1, Map 3.5, Measure 2.6) calls for documented risk management practices and continuous monitoring of AI system behavior. These are not optional recommendations — they are binding obligations for any organization deploying AI in regulated environments. The question every governance professional must answer is: <em>how do you prove compliance when the system you are governing is a black box?</em><br><br>
+
+          <strong style="color:var(--gold); font-weight:500;">The solution:</strong> SecuraMem is an external sidecar process that sits between the user and any OpenAI-compatible LLM, intercepting every interaction and recording it to a tamper-evident, cryptographically-signed hash chain — functionally a single-node blockchain for AI accountability. It uses its own independent ONNX embedding model (all-MiniLM-L6-v2, 384 dimensions) to analyze both prompts and responses in semantic vector space, detecting prompt injection attempts, jailbreak patterns, deceptive alignment signatures, and behavioral drift across conversation sessions. Because the sidecar runs as a separate process with a separate model, the LLM being monitored cannot influence, evade, or corrupt the audit trail. Every entry is SHA-256 chained and ED25519 signed — providing non-repudiable, forensically-verifiable evidence of exactly what happened, when, and whether the model's behavior deviated from policy.<br><br>
+
+          <strong style="color:var(--gold); font-weight:500;">Why this matters for AIGP:</strong> This project is a proof of concept built by a non-technical aspiring AIGP professional to demonstrate that the gap between governance policy and technical implementation can be bridged. It maps directly to all five AIGP certification domains — foundational AI knowledge (ONNX inference, vector similarity, deterministic systems), AI governance (immutable audit trails, policy-based access control), risk management (behavioral drift detection, compliance reporting), responsible AI (external guardrails, non-repudiation, transparency), and privacy (localhost-only operation, zero telemetry, no data exfiltration). It is not an enterprise product. It is a working demonstration that external, deterministic guardrails for LLM accountability are both technically feasible and architecturally necessary — and that the person advocating for these controls in a governance role understands how to build them.
+        </div>
+        <div class="featured-stats">
+          <div class="stat-block">
+            <div class="stat-value">7</div>
+            <div class="stat-label">Rust Crates in Layered Architecture</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">11</div>
+            <div class="stat-label">CLI Commands</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">384D</div>
+            <div class="stat-label">Semantic Embedding Vectors</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">5</div>
+            <div class="stat-label">AIGP Domains Covered</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">0</div>
+            <div class="stat-label">npm Dependencies</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Unsafe Blocks</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="featured-tech">
+        <span class="tech-tag gold">EU AI Act Art. 12, 14, 26</span>
+        <span class="tech-tag gold">ISO 42001</span>
+        <span class="tech-tag gold">NIST AI RMF</span>
+        <span class="tech-tag gold">AIGP 5 Domains</span>
+        <span class="tech-tag blue">Rust</span>
+        <span class="tech-tag blue">ONNX / tract</span>
+        <span class="tech-tag blue">SQLite WAL</span>
+        <span class="tech-tag blue">ED25519</span>
+        <span class="tech-tag blue">SHA-256</span>
+        <span class="tech-tag blue">Axum</span>
+        <span class="tech-tag">Hash Chain</span>
+        <span class="tech-tag">Cosine Similarity</span>
+        <span class="tech-tag">Behavioral Drift</span>
+        <span class="tech-tag">Prompt Injection Detection</span>
+      </div>
+
+      <div class="featured-link">
+        <a href="https://github.com/securamem-brown/securamem-rust-core" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── BUILDING ──────────────────────────────────────────────── -->
+<section id="building">
+  <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 5rem;">
+    <div>
+      <div class="section-label">Currently building</div>
+      <h2 class="section-title">What I'm<br>working on<br><em>now</em></h2>
+      <p style="font-size:0.9rem; color:var(--muted); line-height:1.8; margin-top:1rem;">Every build starts the same way: an idea I cannot stop thinking about, battle-tested across multiple LLMs until the concept is solid, then built end-to-end to see if it actually works. Some ship. Some teach me what not to build next. All of them sharpen the instinct.</p>
+    </div>
+    <div class="blog-list">
+
+      <div class="blog-entry">
+        <div class="blog-date">
+          <span>Shipped</span>
+          April 2026
+        </div>
+        <div>
+          <div class="blog-title">GRC Command Center — full-stack Rust desktop app for multi-framework AI compliance</div>
+          <div class="blog-excerpt">Designed, specified, and built a local-first desktop application that manages AI governance engagements across five regulatory frameworks. 241 seeded requirements from the EU AI Act, ISO 42001, ISO 23894, NIST AI RMF, and OECD AI Principles — with cross-framework reference mapping, per-system compliance assessment, risk matrix visualization, evidence vault, FRIA workflow, immutable audit trail, and LLM-powered regulatory assistant. Zero npm. Rust end-to-end: Tauri 2 shell, Leptos/WASM frontend, SQLx + PostgreSQL backend, AES-256-GCM API key encryption, Askama HTML report generation.</div>
+          <span class="blog-framework">EU AI Act · ISO 42001 · ISO 23894 · NIST AI RMF · OECD AI · Rust · Tauri 2</span>
+        </div>
+      </div>
+
+      <div class="blog-entry">
+        <div class="blog-date">
+          <span>Shipped</span>
+          April 2026
+        </div>
+        <div>
+          <div class="blog-title">AI Technical Reference — 36-chapter desktop knowledge base for LLM internals and governance</div>
+          <div class="blog-excerpt">Built a comprehensive offline-first reference tool mapping transformer architecture, training pipelines, RLHF, tokenisation, RAG, and bias/fairness concepts directly to EU AI Act articles, ISO 42001 controls, NIST AI RMF measures, and ISO 23894 risk criteria. Every chapter includes Mermaid diagrams, comparison tables, and governance relevance callouts with precise regulatory citations. 28,000+ lines across six parts — from neural network foundations to cross-framework regulatory analysis. Packaged as a standalone Tauri 2 desktop application for use during assessments, audits, and interviews. Zero npm dependencies.</div>
+          <span class="blog-framework">Rust · mdBook · Tauri 2 · Mermaid · EU AI Act · ISO 42001 · NIST AI RMF · ISO 23894</span>
+        </div>
+      </div>
+
+      <div class="blog-entry">
+        <div class="blog-date">
+          <span>Shipped</span>
+          April 2026
+        </div>
+        <div>
+          <div class="blog-title">SecuraMem Rust — AI black box recorder and sidecar guardrail for LLM accountability</div>
+          <div class="blog-excerpt">Built to answer a question that kept nagging me during my AIGP studies: if the EU AI Act requires logging and human oversight of high-risk AI systems, how do you actually implement that when the system is a black box? SecuraMem is my proof of concept. A Rust CLI that sits between you and any OpenAI-compatible LLM, recording every interaction to a tamper-evident SHA-256 hash chain with ED25519 signatures. Uses its own ONNX embedding model to detect prompt injection, behavioral drift, and deceptive alignment patterns — inspired by the Mythos research showing LLMs can hide their chain of thought from researchers. 7 crates, 11 commands, zero npm, zero unsafe blocks. E2E tested. Maps to all five AIGP certification domains. Not an enterprise product — a working demonstration that a governance professional can bridge the gap between policy and implementation.</div>
+          <span class="blog-framework">AI Safety · EU AI Act · AIGP · Rust · ONNX · SHA-256 · ED25519 · Hash Chain</span>
+        </div>
+      </div>
+
+      <div class="blog-entry">
+        <div class="blog-date">
+          <span>Active</span>
+          April 2026
+        </div>
+        <div>
+          <div class="blog-title">GRC Command Center — iterating toward production readiness</div>
+          <div class="blog-excerpt">This is the special tool I have been tinkering with since I first started building governance tooling — and the one I keep coming back to. The core platform is shipped and functional, but I am nowhere near done. Current focus: adding Canada's AIDA and PIPEDA frameworks as new migration modules, building automated evidence collection from CI/CD pipelines and model registries, and exploring MCP (Model Context Protocol) integrations for regulated data environments. The architecture was designed for exactly this kind of extensibility — adding a regulation means adding a migration, not rewriting the application. The goal is production-grade software that a real governance team could deploy on day one of an engagement.</div>
+          <span class="blog-framework">AIDA · PIPEDA · MCP · Production Readiness · Extensibility</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── ROADMAP ───────────────────────────────────────────────── -->
+<section id="roadmap">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-label">The journey ahead</div>
+    <h2 class="section-title">Professional<br><em>roadmap</em></h2>
+    <p class="section-intro" style="margin-bottom: 5rem;">This is not a career pivot. It is a convergence — of a regulated industry background, a builder's technical credibility, and a deliberate certification pathway that positions me as a complete AI governance professional.</p>
+    <div class="roadmap-track">
+
+      <div class="roadmap-node">
+        <div class="node-dot done">✓</div>
+        <div>
+          <div class="node-title">Financial Services Foundation</div>
+          <div class="node-desc">12 years · Sagicor Life<br>AML/KYC · Compliance · Risk</div>
+          <div class="node-status status-done">Complete</div>
+        </div>
+      </div>
+
+      <div class="roadmap-node">
+        <div class="node-dot done">✓</div>
+        <div>
+          <div class="node-title">Builder Credential</div>
+          <div class="node-desc">85+ repos · 45+ MVPs<br>Claude Code · Cursor · Rust</div>
+          <div class="node-status status-done">Ongoing</div>
+        </div>
+      </div>
+
+      <div class="roadmap-node">
+        <div class="node-dot active">→</div>
+        <div>
+          <div class="node-title">AIGP Certification</div>
+          <div class="node-desc">AI Governance Professional<br>IAPP · In Progress</div>
+          <div class="node-status status-active">● Active — 2026</div>
+        </div>
+      </div>
+
+      <div class="roadmap-node">
+        <div class="node-dot next">→</div>
+        <div>
+          <div class="node-title">CIPM Certification</div>
+          <div class="node-desc">Certified Information<br>Privacy Manager · IAPP</div>
+          <div class="node-status status-next">Next — 2026/27</div>
+        </div>
+      </div>
+
+      <div class="roadmap-node">
+        <div class="node-dot future">◇</div>
+        <div>
+          <div class="node-title">AI GRC Leadership</div>
+          <div class="node-desc">Senior governance role<br>Financial services · Tech</div>
+          <div class="node-status status-future">Destination</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:4rem; border:1px solid var(--border); padding:2rem 2.5rem; max-width: 720px; background: var(--surface2);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:0.8rem;">Why this sequence</div>
+      <p style="font-size:0.92rem; color:var(--muted); line-height:1.85;">The AIGP establishes the governance credential — it signals to employers that I understand AI risk frameworks, accountability structures, and the regulatory landscape at a professional level. The CIPM adds the privacy management layer that sits at the intersection of AI and data in virtually every enterprise AI deployment. Together, they create a certification stack that matches the actual compliance obligations organizations face when deploying AI in regulated environments — particularly in financial services, where I already have 12 years of lived experience.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CONTACT ───────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="contact-eyebrow">Open to opportunities</div>
+  <h2 class="contact-heading">Let's build something<br><em>responsibly</em></h2>
+  <p class="contact-sub">If you are looking for an AI governance professional who can walk into a technical conversation and a boardroom with equal credibility — let's talk.</p>
+  <div class="contact-links">
+    <a href="mailto:jeremyjaybrown@gmail.com" class="contact-link primary">Send Me an Email</a>
+    <a href="https://linkedin.com/in/jeremy-ja-brown/" class="contact-link ghost">LinkedIn</a>
+    <a href="https://github.com/jahboukie" class="contact-link ghost">GitHub</a>
+  </div>
+  <p class="contact-note">Pickering, Ontario · Open to remote and hybrid across Canada</p>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <span class="footer-copy">© 2026 Jeremy J.A.Brown ·</span>
+  <span class="footer-mark">Building responsibly at the frontier.</span>
+</footer>
+
+<script>
+const entries = document.querySelectorAll('.timeline-entry');
+const observer = new IntersectionObserver((obs) => {
+  obs.forEach(entry => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), 80);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+entries.forEach((el, i) => {
+  el.style.transitionDelay = `${i * 0.05}s`;
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
