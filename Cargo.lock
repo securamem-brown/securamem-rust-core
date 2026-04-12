@@ -2543,9 +2543,6 @@ version = "2.0.0"
 dependencies = [
  "chrono",
  "clap",
- "ed25519-dalek",
- "pkcs8",
- "rand_core",
  "securamem-core",
  "securamem-crypto",
  "securamem-firewall",

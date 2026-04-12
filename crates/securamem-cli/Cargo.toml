@@ -18,8 +18,5 @@ clap = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
-ed25519-dalek = { workspace = true }
-pkcs8 = { workspace = true }
-rand_core = { workspace = true }
 chrono = { version = "0.4", features = ["serde"] }
 serde_json = { workspace = true }

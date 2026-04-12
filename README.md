@@ -2,7 +2,7 @@
 
 **Version:** 2.0.0  
 **Status:** Personal proof-of-concept for AIGP Certification  
-**License:** Proprietary
+**License:** Personal project
 
 ---
 
@@ -56,7 +56,6 @@ curl http://127.0.0.1:3051/v1/chat/completions \
 | `smrust serve --port 3050` | Start L3 monitoring API |
 | `smrust status` | Show system status |
 | `smrust test-embedding --text "..."` | Debug: test ONNX embeddings |
-| `smrust machine-id` | Show hardware fingerprint |
 
 ## Architecture
 

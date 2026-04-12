@@ -12,7 +12,7 @@ use std::path::Path;
 ///
 /// PLACEHOLDER: Replace with actual vendor public key after generation
 pub const VENDOR_PUBLIC_KEY: &str = r#"-----BEGIN PUBLIC KEY-----
-MCowBQYDK2VwAyEAw4JCSJBg+QdfeIH80+/Xb8qa5Tc5OcnEg0rcE2bDph4=
+MCowBQYDK2VwAyEAylgmVSEZdMTK2YkA8Gij+pSajykmGhoI02UY0myi7i0=
 -----END PUBLIC KEY-----"#;
 
 /// License claims structure (JWT payload)

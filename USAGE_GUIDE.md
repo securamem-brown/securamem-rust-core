@@ -308,8 +308,7 @@ smrust status
 # Test the ONNX embedding engine (debug)
 smrust test-embedding --text "Hello world"
 
-# Show this machine's hardware fingerprint
-smrust machine-id
+
 ```
 
 ---

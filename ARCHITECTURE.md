@@ -188,7 +188,7 @@ Binds to `127.0.0.1` only. Increments `http_requests_total` counter on every req
 
 ### securamem-cli — Binary Entry Point
 
-The `smrust` binary exposes 14 commands:
+The `smrust` binary exposes 11 commands:
 
 | Command | Layer |
 |---------|-------|
@@ -198,7 +198,6 @@ The `smrust` binary exposes 14 commands:
 | `compliance-report`, `init-policy` | Compliance (L1) |
 | `audit-log`, `export-audit` | Storage queries |
 | `test-embedding` | Firewall debug |
-| `machine-id`, `gen-vendor-keys`, `gen-license` | Identity/Licensing |
 
 ---
 

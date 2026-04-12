@@ -41,33 +41,6 @@ enum Commands {
     /// Show status
     Status,
 
-    /// Generate vendor keypair (development only)
-    #[command(hide = true)]
-    GenVendorKeys,
-
-    /// Generate license for a client (vendor only)
-    #[command(hide = true)]
-    GenLicense {
-        /// Target machine ID
-        #[arg(long)]
-        machine_id: String,
-        /// Company/organization name
-        #[arg(long)]
-        company: String,
-        /// License type (trial, standard, enterprise)
-        #[arg(long, default_value = "trial")]
-        license_type: String,
-        /// Number of days the license is valid
-        #[arg(long, default_value = "14")]
-        days: i64,
-        /// Path to vendor private key PEM file
-        #[arg(long)]
-        vendor_key: String,
-    },
-
-    /// Show machine ID (for license generation)
-    MachineId,
-
     /// Start the semantic firewall proxy (NeuroWall)
     Firewall {
         #[arg(long, default_value = "3051")]
@@ -122,48 +95,6 @@ async fn main() -> securamem_core::Result<()> {
         .init();
 
     let cli = Cli::parse();
-
-    // LICENSE CHECK (Skip for vendor/development commands)
-    let skip_license_check = matches!(cli.command, Commands::GenVendorKeys | Commands::GenLicense { .. } | Commands::MachineId);
-
-    if !skip_license_check {
-        let license_path = std::path::PathBuf::from("license.key");
-
-        if !license_path.exists() {
-            eprintln!("\n❌ LICENSE NOT FOUND");
-            eprintln!("SecuraMem requires a valid license to operate.");
-            eprintln!();
-
-            let machine_id = securamem_core::license::get_machine_id()?;
-            eprintln!("Your Machine ID: {}", machine_id);
-            eprintln!();
-            eprintln!("📧 Send this Machine ID to jeremy@securamem.com to request a license.");
-            eprintln!("💾 Place the received license.key file in the current directory.");
-            std::process::exit(1);
-        }
-
-        match securamem_core::license::verify_license(&license_path) {
-            Ok(info) => {
-                if info.days_remaining <= 7 {
-                    eprintln!("\n⚠️  LICENSE EXPIRING SOON");
-                    eprintln!("  {} days remaining", info.days_remaining);
-                }
-                tracing::info!("License verified: {} ({}) - {} days remaining",
-                    info.company, info.license_type, info.days_remaining);
-            }
-            Err(e) => {
-                eprintln!("\n❌ LICENSE INVALID");
-                eprintln!("{}", e);
-                eprintln!();
-
-                let machine_id = securamem_core::license::get_machine_id()?;
-                eprintln!("Your Machine ID: {}", machine_id);
-                eprintln!();
-                eprintln!("📧 Contact jeremy@securamem.com for a new license.");
-                std::process::exit(1);
-            }
-        }
-    }
 
     match cli.command {
         Commands::Init => {
@@ -310,68 +241,6 @@ async fn main() -> securamem_core::Result<()> {
             println!("    Actor: {}", genesis.1);
             println!("    Operation: {}", genesis.2);
 
-            Ok(())
-        }
-        Commands::GenVendorKeys => {
-            // Generate a fresh ED25519 keypair for vendor use
-            use ed25519_dalek::SigningKey;
-            use ed25519_dalek::pkcs8::{EncodePrivateKey, EncodePublicKey};
-            use rand_core::OsRng;
-
-            let signing_key = SigningKey::generate(&mut OsRng);
-            let verifying_key = signing_key.verifying_key();
-
-            let private_pem = signing_key
-                .to_pkcs8_pem(pkcs8::LineEnding::LF)
-                .map_err(|e| securamem_core::SecuraMemError::Internal(e.to_string()))?;
-
-            let public_pem = verifying_key
-                .to_public_key_pem(pkcs8::LineEnding::LF)
-                .map_err(|e| securamem_core::SecuraMemError::Internal(e.to_string()))?;
-
-            println!("=== VENDOR KEYPAIR GENERATED ===\n");
-            println!("PRIVATE KEY (Keep this secure!):");
-            println!("{}", private_pem.as_str());
-            println!("\nPUBLIC KEY (Embed this in VENDOR_PUBLIC_KEY constant):");
-            println!("{}", public_pem);
-            println!("\n⚠️  Save the private key to a secure location!");
-            println!("⚠️  Update securamem-core/src/license.rs with the public key!");
-
-            Ok(())
-        }
-        Commands::GenLicense { machine_id, company, license_type, days, vendor_key } => {
-            // Read vendor private key
-            let vendor_key_pem = std::fs::read_to_string(&vendor_key)
-                .map_err(|e| securamem_core::SecuraMemError::LicenseError(format!("Failed to read vendor key: {}", e)))?;
-
-            // Generate license
-            let license_jwt = securamem_core::license::generate_license(
-                &machine_id,
-                &company,
-                &license_type,
-                days,
-                &vendor_key_pem,
-            )?;
-
-            // Save to file
-            let license_path = std::path::PathBuf::from("license.key");
-            std::fs::write(&license_path, &license_jwt)
-                .map_err(|e| securamem_core::SecuraMemError::LicenseError(format!("Failed to write license: {}", e)))?;
-
-            println!("✓ License generated successfully!");
-            println!("  Company: {}", company);
-            println!("  Type: {}", license_type);
-            println!("  Valid for: {} days", days);
-            println!("  Machine ID: {}", machine_id);
-            println!("  Saved to: {:?}", license_path);
-            println!("\n📧 Send this license.key file to the customer.");
-
-            Ok(())
-        }
-        Commands::MachineId => {
-            let machine_id = securamem_core::license::get_machine_id()?;
-            println!("Machine ID: {}", machine_id);
-            println!("\n📧 Send this Machine ID to jeremy@securamem.com to request a license.");
             Ok(())
         }
         Commands::Firewall { port, openai_api_key } => {

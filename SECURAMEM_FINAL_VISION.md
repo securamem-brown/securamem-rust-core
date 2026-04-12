@@ -121,7 +121,7 @@ This project demonstrates competency in the following AIGP (AI Governance Profes
 
 ### Domain 5: Privacy and AI
 - Localhost-only operation (no data leaves the machine)
-- Hardware-locked licensing (per-machine identity)
+- Localhost-only operation (per-machine identity)
 - Configurable audit depth (full response vs snippet)
 - No telemetry, no external calls except to the specified LLM endpoint
 
@@ -212,9 +212,7 @@ This project demonstrates competency in the following AIGP (AI Governance Profes
 - [x] `test-embedding --text` — Debug embeddings
 - [x] `export-audit --output` — JSON audit export
 - [x] `audit-log --limit --filter` — View entries (SQL-injection-safe)
-- [x] `machine-id` — Hardware fingerprint
-- [x] `gen-vendor-keys` — Vendor keypair generation
-- [x] `gen-license` — JWT license generation
+
 - [x] **`compliance-report --output` — AIGP compliance summary**
 - [x] **`init-policy` — Bootstrap default policy.toml**
 
@@ -233,7 +231,6 @@ This project demonstrates competency in the following AIGP (AI Governance Profes
 - [x] ED25519 from audited `ed25519-dalek` crate
 - [x] SHA-256 from audited `ring` crate (BoringSSL-derived)
 - [x] No telemetry or external data exfiltration
-- [x] Hardware-locked licensing
 - [x] File permissions on private keys (Unix)
 
 ---
