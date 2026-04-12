@@ -37,3 +37,10 @@ anyhow = "1.0"
 tracing = { workspace = true }
 thiserror = { workspace = true }
 chrono = { workspace = true }
+
+# Policy configuration
+toml = "0.8"
+
+# Session ID derivation
+sha2 = { workspace = true }
+hex = { workspace = true }

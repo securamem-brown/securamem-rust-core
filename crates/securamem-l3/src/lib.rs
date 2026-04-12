@@ -50,13 +50,28 @@ pub struct AppState {
 
 // --- Handlers ---
 
-/// GET /health - Simple Liveness Probe
+/// GET /health - Liveness Probe with DB Verification
 async fn health_check(State(state): State<AppState>) -> Json<serde_json::Value> {
     state.metrics.http_requests.inc();
+
+    // Verify database connectivity
+    let db_status = securamem_storage::sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM audit_log")
+        .fetch_one(&state.db.pool)
+        .await;
+
+    let (status, db_ok, entry_count) = match db_status {
+        Ok(count) => ("ok", true, count),
+        Err(_) => ("degraded", false, 0),
+    };
+
     Json(json!({
-        "status": "ok",
+        "status": status,
         "version": "2.0.0",
-        "mode": "audit-only"
+        "mode": "audit-only",
+        "database": {
+            "connected": db_ok,
+            "entry_count": entry_count
+        }
     }))
 }
 

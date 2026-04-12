@@ -9,7 +9,9 @@ securamem-crypto = { path = "../securamem-crypto" }
 securamem-storage = { path = "../securamem-storage" }
 
 # Utilities
+serde = { workspace = true }
 serde_json = { workspace = true }
 uuid = { workspace = true }
 chrono = { workspace = true }
 tracing = { workspace = true }
+sqlx = { workspace = true }

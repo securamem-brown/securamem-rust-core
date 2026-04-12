@@ -100,6 +100,16 @@ enum Commands {
         #[arg(short, long)]
         filter: Option<String>,
     },
+
+    /// Generate compliance summary report (AIGP attestation)
+    ComplianceReport {
+        /// Output file path for the JSON report
+        #[arg(short, long, default_value = "compliance_report.json")]
+        output: String,
+    },
+
+    /// Initialize default firewall policy file
+    InitPolicy,
 }
 
 #[tokio::main]
@@ -494,32 +504,34 @@ async fn main() -> securamem_core::Result<()> {
 
             let db = Database::init(&db_path).await?;
 
-            // Build query based on filter
-            let query = if let Some(ref op_filter) = filter {
-                format!(
-                    r#"SELECT id, receipt_id, timestamp, actor_user_id, operation_type, audit_data 
-                    FROM audit_log 
-                    WHERE operation_type = '{}' 
-                    ORDER BY id DESC 
-                    LIMIT {}"#,
-                    op_filter,
-                    if limit == 0 { 10000 } else { limit }
-                )
-            } else {
-                format!(
-                    r#"SELECT id, receipt_id, timestamp, actor_user_id, operation_type, audit_data 
-                    FROM audit_log 
-                    ORDER BY id DESC 
-                    LIMIT {}"#,
-                    if limit == 0 { 10000 } else { limit }
-                )
-            };
+            // Build query with parameterized filter (prevents SQL injection)
+            let effective_limit = if limit == 0 { 10000i64 } else { limit };
 
-            let entries: Vec<(i64, String, String, String, String, String)> = 
-                securamem_storage::sqlx::query_as(&query)
+            let entries: Vec<(i64, String, String, String, String, String)> = if let Some(ref op_filter) = filter {
+                securamem_storage::sqlx::query_as(
+                    r#"SELECT id, receipt_id, timestamp, actor_user_id, operation_type, audit_data 
+                    FROM audit_log 
+                    WHERE operation_type = ? 
+                    ORDER BY id DESC 
+                    LIMIT ?"#,
+                )
+                .bind(op_filter)
+                .bind(effective_limit)
                 .fetch_all(&db.pool)
                 .await
-                .map_err(|e| securamem_core::SecuraMemError::Database(e.to_string()))?;
+                .map_err(|e| securamem_core::SecuraMemError::Database(e.to_string()))?
+            } else {
+                securamem_storage::sqlx::query_as(
+                    r#"SELECT id, receipt_id, timestamp, actor_user_id, operation_type, audit_data 
+                    FROM audit_log 
+                    ORDER BY id DESC 
+                    LIMIT ?"#,
+                )
+                .bind(effective_limit)
+                .fetch_all(&db.pool)
+                .await
+                .map_err(|e| securamem_core::SecuraMemError::Database(e.to_string()))?
+            };
 
             if entries.is_empty() {
                 println!("No audit entries found.");
@@ -563,6 +575,77 @@ async fn main() -> securamem_core::Result<()> {
             if let Some(ref op_filter) = filter {
                 println!("  Filtered by: {}", op_filter);
             }
+
+            Ok(())
+        }
+        Commands::ComplianceReport { output } => {
+            let db_path = PathBuf::from(".securamem/memory.db");
+
+            if !db_path.exists() {
+                eprintln!("❌ Database not initialized. Run 'smem init' first.");
+                std::process::exit(1);
+            }
+
+            let db = Database::init(&db_path).await?;
+
+            tracing::info!("Generating compliance summary...");
+
+            let analyzer = securamem_l1::ComplianceAnalyzer::new(&db);
+            let summary = analyzer.generate_summary().await?;
+
+            // Display summary to terminal
+            println!("╔══════════════════════════════════════════════════════════════════════════════╗");
+            println!("║                    SECURAMEM COMPLIANCE REPORT                               ║");
+            println!("╠══════════════════════════════════════════════════════════════════════════════╣");
+            println!("║ Generated: {}", summary.generated_at);
+            println!("║ Chain Integrity: {}", if summary.chain_integrity { "✓ VERIFIED" } else { "✗ COMPROMISED" });
+            println!("║ Policy Version: {}", summary.policy_version.as_deref().unwrap_or("N/A"));
+            println!("╟──────────────────────────────────────────────────────────────────────────────╢");
+            println!("║ Total Interactions: {}", summary.total_interactions);
+            println!("║ Blocked: {} | Allowed: {}", summary.blocked_count, summary.allowed_count);
+            println!("║ Sessions Tracked: {}", summary.session_count);
+            if let Some(avg_c) = summary.avg_coherence {
+                println!("║ Avg Coherence Score: {:.4}", avg_c);
+            }
+            println!("╟──────────────────────────────────────────────────────────────────────────────╢");
+            println!("║ Risk Distribution:");
+            println!("║   Nominal:  {}", summary.risk_distribution.nominal);
+            println!("║   Low:      {}", summary.risk_distribution.low);
+            println!("║   Medium:   {}", summary.risk_distribution.medium);
+            println!("║   High:     {}", summary.risk_distribution.high);
+            println!("║   Critical: {}", summary.risk_distribution.critical);
+            println!("╟──────────────────────────────────────────────────────────────────────────────╢");
+            println!("║ Flags:");
+            for flag in &summary.flags {
+                println!("║   {}", flag);
+            }
+            println!("╚══════════════════════════════════════════════════════════════════════════════╝");
+
+            // Write JSON report
+            let json_str = serde_json::to_string_pretty(&summary)
+                .map_err(|e| securamem_core::SecuraMemError::Internal(e.to_string()))?;
+
+            std::fs::write(&output, &json_str)
+                .map_err(|e| securamem_core::SecuraMemError::Io(e))?;
+
+            println!("\n✓ Report saved to: {}", output);
+
+            Ok(())
+        }
+        Commands::InitPolicy => {
+            let policy_path = std::path::PathBuf::from(".securamem/policy.toml");
+
+            if policy_path.exists() {
+                eprintln!("⚠️  Policy file already exists at {}", policy_path.display());
+                eprintln!("  Delete it first if you want to regenerate defaults.");
+                return Ok(());
+            }
+
+            securamem_firewall::FirewallPolicy::write_default(&policy_path)
+                .map_err(|e| securamem_core::SecuraMemError::Internal(e.to_string()))?;
+
+            println!("✓ Default firewall policy written to {}", policy_path.display());
+            println!("  Edit this file to customize forbidden concepts, thresholds, and policies.");
 
             Ok(())
         }
